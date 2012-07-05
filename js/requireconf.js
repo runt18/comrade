@@ -4,25 +4,26 @@ require.config({
     paths: {
         'jquery': 'vendor/jquery-1.7.2.min',
 
-        'entitiy': 'entitiy',
+        'entity': 'entity',
+        'constants': 'constants',
 
         'plugins': 'plugins',
+        'keymaster': 'vendor/keymaster',
+        'perlin': 'vendor/perlin'
     },
 
     shim: {
-        // 'underscore': {
-        //     exports: '_'
-        // },
-
+        'keymaster': {
+            exports: 'key'
+        },
+        'perlin': {
+            exports: 'PerlinNoise'
+        }
         // 'backbone': {
         //     deps: ['underscore', 'jquery'],
         //     exports: 'Backbone'
         // },
 
         // 'layoutmanager': ['jquery', 'underscore', 'backbone'],
-
-        // 'jquery-ui': ['jquery'],
-        // 'jquery-ui-timepicker': ['jquery-ui', 'jquery']
-
     }
 });

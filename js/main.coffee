@@ -1,4 +1,4 @@
-require(['jquery', 'entity'], ($, Entities)->
+require(['jquery', 'keymaster', 'entity'], ($, key, Entities)->
     Player = Entities.Player
     Creature = Entities.Creature
     
@@ -17,31 +17,19 @@ require(['jquery', 'entity'], ($, Entities)->
     load_scene()
 
     key('w', ->
-        return if player.frames_left > 0
-        player.axis = 'y'
-        player.direction = -1
-        player.move()
+        player.move('y', -1)
     )
 
     key('a', ->
-        return if player.frames_left > 0
-        player.axis = 'x'
-        player.direction = -1
-        player.move()
+        player.move('x', -1)
     )
 
     key('s', ->
-        return if player.frames_left > 0
-        player.axis = 'y'
-        player.direction = 1
-        player.move()
+        player.move('y', 1)
     )
 
     key('d', ->
-        return if player.frames_left > 0
-        player.axis = 'x'
-        player.direction = 1
-        player.move()
+        player.move('x', 1)
     )
 
     key('l', ->
@@ -65,27 +53,28 @@ require(['jquery', 'entity'], ($, Entities)->
     tick = 0
 
     render = (time)->
-        ctx.clearRect(0, 0, screen_width, screen_height)
-        draw_block(x, y, tile) for tile, x in row for row, y in scene
+        ctx.clearRect 0, 0, screen_width, screen_height
+        draw_block x, y, tile for tile, x in row for row, y in scene
         
         for creature in creatures
             if tick % 10 is 0
                 if Math.random() > 0.9
-                    creature.axis = if Math.random() > 0.5 then 'x' else 'y'
-                    creature.direction = if Math.random() > 0.5 then 1 else -1
-                    creature.move()
+                    axis = if Math.random() > 0.5 then 'x' else 'y'
+                    direction = if Math.random() > 0.5 then 1 else -1
+                    creature.move(axis, direction)
             creature.animate()
+        
         player.animate()
 
         tick += 1
 
     animate = (time)->
-        requestAnimationFrame(animate)
-        render(time)
+        requestAnimationFrame animate
+        render time
 
-    $(document).ready(->
-        $canvas = $('<canvas>')
-        $('body').append($canvas)
+    $(document).ready ->
+        $canvas = $ '<canvas>'
+        $('body').append $canvas
         canvas = $canvas[0]
 
         canvas.width = screen_width
@@ -93,5 +82,4 @@ require(['jquery', 'entity'], ($, Entities)->
         window.ctx = canvas.getContext '2d'
 
         animate()
-    )
 )

@@ -4,24 +4,43 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define([], function() {
+  define(['constants'], function() {
     var Creature, Entity, Player;
     Entity = (function() {
 
-      function Entity() {
-        this.colour = 'red';
-        this.frames_left = 0;
-        this.pos = {
-          x: width / 2,
-          y: height / 2
+      function Entity(x, y) {
+        var direction, _i, _len, _ref;
+        this.x = x;
+        this.y = y;
+        this.images = {
+          up: new Image(),
+          left: new Image(),
+          down: new Image(),
+          right: new Image()
         };
+        _ref = 'up left down right'.split(' ');
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          direction = _ref[_i];
+          this.images[direction].src = "img/sprites/player/" + direction + ".png";
+        }
+        this.image = this.images.down;
+        this.frames_left = 0;
+        this.set_position();
         this.axis = 'x';
         this.direction = 1;
         this.set_in_front();
       }
 
-      Entity.prototype.set_colour = function(colour) {
-        return this.colour = colour;
+      Entity.prototype.set_image = function() {
+        var image;
+        switch (this.axis) {
+          case 'x':
+            image = this.direction === 1 ? 'right' : 'left';
+            break;
+          case 'y':
+            image = this.direction === 1 ? 'down' : 'up';
+        }
+        return this.image = this.images[image];
       };
 
       Entity.prototype.set_in_front = function() {
@@ -40,8 +59,7 @@
       };
 
       Entity.prototype.draw = function() {
-        ctx.fillStyle = this.colour;
-        return ctx.fillRect(this.pos.x * tile_size, this.pos.y * tile_size, tile_size, tile_size);
+        return ctx.drawImage(this.image, this.pos.x * tile_size, this.pos.y * tile_size, tile_size, tile_size);
       };
 
       Entity.prototype.animate = function() {
@@ -55,8 +73,15 @@
         return this.draw();
       };
 
-      Entity.prototype.move = function() {
+      Entity.prototype.move = function(axis, direction) {
         var next_tile;
+        if (this.frames_left > 0) {
+          return;
+        }
+        this.axis = axis;
+        this.direction = direction;
+        this.set_image();
+        this.move_scene();
         try {
           next_tile = scene[this.in_front.y][this.in_front.x];
         } catch (TypeError) {
@@ -81,8 +106,15 @@
         return Player.__super__.constructor.apply(this, arguments);
       }
 
-      Player.prototype.move = function() {
-        var item, new_scene, next_tile, _i, _len, _ref;
+      Player.prototype.set_position = function() {
+        return this.pos = {
+          x: width / 2,
+          y: height / 2
+        };
+      };
+
+      Player.prototype.move_scene = function() {
+        var item, new_scene, _i, _len, _ref;
         new_scene = false;
         _ref = [
           {
@@ -107,18 +139,7 @@
           }
         }
         if (new_scene) {
-          load_scene();
-        }
-        try {
-          next_tile = scene[this.in_front.y][this.in_front.x];
-        } catch (TypeError) {
-
-        }
-        this.set_in_front();
-        debugger;
-        this.frames_left = 10;
-        if (__indexOf.call(solid_tiles, next_tile) >= 0) {
-          return this.frames_left = 0;
+          return load_scene();
         }
       };
 
@@ -129,17 +150,18 @@
 
       __extends(Creature, _super);
 
-      function Creature(x, y) {
-        this.colour = 'purple';
-        this.frames_left = 0;
-        this.pos = {
-          x: x || Math.floor(Math.random() * width),
-          y: y || Math.floor(Math.random() * height)
-        };
-        this.axis = 'x';
-        this.direction = 1;
-        this.set_in_front();
+      function Creature() {
+        return Creature.__super__.constructor.apply(this, arguments);
       }
+
+      Creature.prototype.set_position = function() {
+        return this.pos = {
+          x: this.x || Math.floor(Math.random() * width),
+          y: this.y || Math.floor(Math.random() * height)
+        };
+      };
+
+      Creature.prototype.move_scene = function() {};
 
       return Creature;
 
