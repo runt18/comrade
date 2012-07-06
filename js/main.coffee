@@ -1,40 +1,37 @@
-require(['jquery', 'keymaster', 'entity'], ($, key, Entities)->
+require(['jquery', 'entity'], ($, Entities)->
     Player = Entities.Player
     Creature = Entities.Creature
     
     draw_block = (x, y, type)->
-        # log(type)
         switch type
             when 1 then ctx.fillStyle = 'green'
             when 2 then ctx.fillStyle = 'blue'
             when 3 then ctx.fillStyle = 'brown'
         ctx.fillRect x * tile_size, y * tile_size, tile_size, tile_size
 
+    load_scene()
+
     player = new Player
     num_creatures = 10
     creatures = (new Creature for x in [1..num_creatures])
-
-    load_scene()
 
     keys_down = 
         w: no
         a: no
         s: no
         d: no
+        l: no
 
-    key('l', ->
-        creatures.push new Creature player.in_front.x, player.in_front.y
-    )
 
-    key('k', ->
-        for creature in creatures
-            # debugger
+    # key('k', ->
+    #     for creature in creatures
+    #         # debugger
 
-            if Math.round player.in_front.x is Math.round creature.pos.x and Math.round player.in_front.y is Math.round creature.pos.y
-                debugger
-                creatures.splice creatures.indexOf creature
-    )
-    
+    #         if Math.round player.in_front.x is Math.round creature.pos.x and Math.round player.in_front.y is Math.round creature.pos.y
+    #             debugger
+    #             creatures.splice creatures.indexOf creature
+    # )
+
     tick = 0
 
     render = (time)->
@@ -42,6 +39,9 @@ require(['jquery', 'keymaster', 'entity'], ($, key, Entities)->
         player.move 'x', -1 if keys_down.a
         player.move 'y', 1 if keys_down.s
         player.move 'x', 1 if keys_down.d
+
+        creatures.push new Creature player.in_front.x, player.in_front.y if keys_down.l
+
 
         ctx.clearRect 0, 0, screen_width, screen_height
         draw_block x, y, tile for tile, x in row for row, y in scene
@@ -62,6 +62,17 @@ require(['jquery', 'keymaster', 'entity'], ($, key, Entities)->
         requestAnimationFrame animate
         render time
 
+    change_keys = (event, is_down)->
+        code = event.which
+        if code in [87, 65, 83, 68, 76]
+            event.preventDefault()
+            switch code
+                when 87 then keys_down.w = is_down
+                when 65 then keys_down.a = is_down
+                when 83 then keys_down.s = is_down
+                when 68 then keys_down.d = is_down
+                when 76 then keys_down.l = is_down
+
     $(document).ready ->
         $canvas = $ '<canvas>'
         $body = $ 'body'
@@ -74,24 +85,10 @@ require(['jquery', 'keymaster', 'entity'], ($, key, Entities)->
 
 
         $body.keydown (event)->
-            code = event.which
-            if code in [87, 65, 83, 68]
-                event.preventDefault()
-                switch code
-                    when 87 then keys_down.w = yes
-                    when 65 then keys_down.a = yes
-                    when 83 then keys_down.s = yes
-                    when 68 then keys_down.d = yes
+            change_keys(event, yes)
 
         $body.keyup (event)->
-            code = event.which
-            if code in [87, 65, 83, 68]
-                event.preventDefault()
-                switch code
-                    when 87 then keys_down.w = no
-                    when 65 then keys_down.a = no
-                    when 83 then keys_down.s = no
-                    when 68 then keys_down.d = no
+            change_keys(event, no)
 
         animate()
 )

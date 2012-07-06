@@ -31,6 +31,15 @@
         this.set_in_front();
       }
 
+      Entity.prototype.set_position = function() {
+        var pos;
+        pos = empty_tiles[Math.round(Math.random() * empty_tiles.length)];
+        return this.pos = {
+          x: pos[0],
+          y: pos[1]
+        };
+      };
+
       Entity.prototype.set_image = function() {
         var image;
         switch (this.axis) {
@@ -66,9 +75,6 @@
         if (this.frames_left > 0) {
           this.pos[this.axis] += this.direction * 0.1;
           this.frames_left -= 1;
-        } else {
-          this.pos.x = Math.round(this.pos.x);
-          this.pos.y = Math.round(this.pos.y);
         }
         return this.draw();
       };
@@ -78,20 +84,21 @@
         if (this.frames_left > 0) {
           return;
         }
+        this.pos.x = Math.round(this.pos.x);
+        this.pos.y = Math.round(this.pos.y);
         this.axis = axis;
         this.direction = direction;
         this.set_image();
         this.move_scene();
-        try {
-          next_tile = scene[this.in_front.y][this.in_front.x];
-        } catch (TypeError) {
-
-        }
         this.set_in_front();
-        debugger;
-        this.frames_left = 10;
-        if (__indexOf.call(solid_tiles, next_tile) >= 0) {
-          return this.frames_left = 0;
+        if (axis === 'x') {
+          next_tile = scene[this.pos.y][this.pos.x + direction];
+        }
+        if (axis === 'y') {
+          next_tile = scene[this.pos.y + direction][this.pos.x];
+        }
+        if (__indexOf.call(solid_tiles, next_tile) < 0) {
+          return this.frames_left = 10;
         }
       };
 
@@ -105,13 +112,6 @@
       function Player() {
         return Player.__super__.constructor.apply(this, arguments);
       }
-
-      Player.prototype.set_position = function() {
-        return this.pos = {
-          x: width / 2,
-          y: height / 2
-        };
-      };
 
       Player.prototype.move_scene = function() {
         var item, new_scene, _i, _len, _ref;
@@ -153,13 +153,6 @@
       function Creature() {
         return Creature.__super__.constructor.apply(this, arguments);
       }
-
-      Creature.prototype.set_position = function() {
-        return this.pos = {
-          x: this.x || Math.floor(Math.random() * width),
-          y: this.y || Math.floor(Math.random() * height)
-        };
-      };
 
       Creature.prototype.move_scene = function() {};
 

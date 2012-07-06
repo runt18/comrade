@@ -20,6 +20,12 @@ define(['constants'], ->
             @direction = 1
             @set_in_front()
 
+        set_position: ->
+            pos = empty_tiles[Math.round Math.random() * empty_tiles.length]
+            @pos =
+                x: pos[0]
+                y: pos[1]
+
         set_image: ->
             switch @axis
                 when 'x'
@@ -41,39 +47,38 @@ define(['constants'], ->
             if @frames_left > 0
                 @pos[@axis] += @direction * 0.1
                 @frames_left -= 1
-            else
-                @pos.x = Math.round @pos.x
-                @pos.y = Math.round @pos.y
+
             @draw()
 
         move: (axis, direction)->
+            # Don't do anything if it's currently moving
             return if @frames_left > 0
 
+            # Snap to nearest grid square
+            @pos.x = Math.round @pos.x
+            @pos.y = Math.round @pos.y
+
+            # Set the axis and direction and update the image to refect this
             @axis = axis
             @direction = direction
             @set_image()
             
+            # Move to a new scene if it's moving off the edge of the current one
             @move_scene()
 
-            try
-                next_tile = scene[@in_front.y][@in_front.x]
-                # log next_tile
-            catch TypeError
-                # log 'edge'
-
+            # Update the coordinates of the square in front
             @set_in_front()
 
-            debugger
-            @frames_left = 10
-            if next_tile in solid_tiles
-                @frames_left = 0
+            # Calculate the contents of the tile that it's trying to move to
+            if axis is 'x'
+                next_tile = scene[@pos.y][@pos.x + direction]
+            if axis is 'y'
+                next_tile = scene[@pos.y + direction][@pos.x] 
+            
+            # Let it move if the tile isn't water or rock or something    
+            @frames_left = 10 unless next_tile in solid_tiles
 
     class Player extends Entity
-        set_position: ->
-            @pos =
-                x: width / 2
-                y: height / 2
-
         move_scene: ->
             new_scene = false
             for item in [{axis: 'x', dimension: width}, {axis: 'y', dimension: height}]
@@ -90,11 +95,6 @@ define(['constants'], ->
 
 
     class Creature extends Entity
-        set_position: ->
-            @pos =
-                x: @x or Math.floor Math.random() * width
-                y: @y or Math.floor Math.random() * height
-
         move_scene: ->
 
     {Player: Player, Creature: Creature}
