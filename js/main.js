@@ -41,8 +41,13 @@
       if (keys_down.d) {
         player.move('x', 1);
       }
-      if (keys_down.l) {
-        creatures.push(new Creature(player.in_front.x, player.in_front.y));
+      if (tick % 10 === 0) {
+        if (keys_down.l) {
+          creatures.push(new Creature({
+            x: player.in_front.x,
+            y: player.in_front.y
+          }));
+        }
       }
       ctx.clearRect(0, 0, screen_width, screen_height);
       for (y = _i = 0, _len = scene.length; _i < _len; y = ++_i) {
@@ -93,7 +98,7 @@
       var $body, $canvas, canvas;
       $canvas = $('<canvas>');
       $body = $('body');
-      $body.append($canvas);
+      $('#game').html($canvas);
       canvas = $canvas[0];
       canvas.width = screen_width;
       canvas.height = screen_height;

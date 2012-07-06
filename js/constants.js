@@ -36,7 +36,10 @@
           cell = row[x];
           debugger;
           if (__indexOf.call(window.solid_tiles, cell) < 0) {
-            window.empty_tiles.push([x, y]);
+            window.empty_tiles.push({
+              x: x,
+              y: y
+            });
           }
         }
       }
@@ -49,7 +52,7 @@
         return _results;
       })();
     };
-    window.width = 20;
+    window.width = 30;
     window.height = 20;
     window.creatures = [];
     window.current_scene = {
@@ -58,7 +61,7 @@
     };
     window.world_width = width * scenes;
     window.world_height = height * scenes;
-    window.tile_size = 20;
+    window.tile_size = 30;
     window.screen_width = width * tile_size;
     window.screen_height = height * tile_size;
     window.ctx = null;

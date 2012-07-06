@@ -6,10 +6,9 @@
     var Entity;
     Entity = (function() {
 
-      function Entity(x, y) {
+      function Entity(pos) {
         var direction, _i, _len, _ref;
-        this.x = x;
-        this.y = y;
+        this.pos = pos;
         this.images = {
           up: new Image(),
           left: new Image(),
@@ -30,12 +29,7 @@
       }
 
       Entity.prototype.set_position = function() {
-        var pos;
-        pos = empty_tiles[Math.round(Math.random() * empty_tiles.length)];
-        return this.pos = {
-          x: pos[0],
-          y: pos[1]
-        };
+        return this.pos = this.pos || empty_tiles[Math.round(Math.random() * empty_tiles.length)];
       };
 
       Entity.prototype.set_image = function() {

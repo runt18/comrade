@@ -36,7 +36,8 @@ require(['jquery', 'player', 'creature'], ($, Player, Creature)->
         player.move 'y', 1 if keys_down.s
         player.move 'x', 1 if keys_down.d
 
-        creatures.push new Creature player.in_front.x, player.in_front.y if keys_down.l
+        if tick % 10 is 0
+            creatures.push new Creature x: player.in_front.x, y: player.in_front.y if keys_down.l
 
 
         ctx.clearRect 0, 0, screen_width, screen_height
@@ -72,7 +73,7 @@ require(['jquery', 'player', 'creature'], ($, Player, Creature)->
     $(document).ready ->
         $canvas = $ '<canvas>'
         $body = $ 'body'
-        $body.append $canvas
+        $('#game').html $canvas
         canvas = $canvas[0]
 
         canvas.width = screen_width

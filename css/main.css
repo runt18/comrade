@@ -439,6 +439,25 @@ td {
    Author:
    ========================================================================== */
 
+body{
+    background: black;
+    color: white;
+}
+
+h1{
+    text-align:
+    center;
+}
+
+#game{
+    height: 600px;
+    text-align: center;
+}
+
+#container{
+    margin: 0 auto;
+    width: 900px;
+}
 
 
 

@@ -1,8 +1,7 @@
 define(['constants'], ->
     class Entity
-        constructor: (x, y)->
-            @x = x
-            @y = y
+        constructor: (pos)->
+            @pos = pos
             @images =
                 up: new Image()
                 left: new Image()
@@ -21,10 +20,7 @@ define(['constants'], ->
             @set_in_front()
 
         set_position: ->
-            pos = empty_tiles[Math.round Math.random() * empty_tiles.length]
-            @pos =
-                x: pos[0]
-                y: pos[1]
+            @pos = @pos or empty_tiles[Math.round Math.random() * empty_tiles.length]
 
         set_image: ->
             switch @axis
