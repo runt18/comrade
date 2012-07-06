@@ -1,7 +1,5 @@
-require(['jquery', 'entity'], ($, Entities)->
-    Player = Entities.Player
-    Creature = Entities.Creature
-    
+require(['jquery', 'player', 'creature'], ($, Player, Creature)->
+    window.Creature = Creature
     draw_block = (x, y, type)->
         switch type
             when 1 then ctx.fillStyle = 'green'
@@ -12,8 +10,6 @@ require(['jquery', 'entity'], ($, Entities)->
     load_scene()
 
     player = new Player
-    num_creatures = 10
-    creatures = (new Creature for x in [1..num_creatures])
 
     keys_down = 
         w: no

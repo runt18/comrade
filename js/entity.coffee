@@ -78,24 +78,5 @@ define(['constants'], ->
             # Let it move if the tile isn't water or rock or something    
             @frames_left = 10 unless next_tile in solid_tiles
 
-    class Player extends Entity
-        move_scene: ->
-            new_scene = false
-            for item in [{axis: 'x', dimension: width}, {axis: 'y', dimension: height}]
-                if @pos[item.axis] is 0 and @axis is item.axis and @direction is -1
-                    @pos[item.axis] = item.dimension
-                    current_scene[item.axis] -= 1
-                    new_scene = true
-                if @pos[item.axis] is item.dimension - 1 and @axis is item.axis and @direction is 1
-                    @pos[item.axis] = -1
-                    current_scene[item.axis] += 1
-                    new_scene = true
-
-            load_scene() if new_scene
-
-
-    class Creature extends Entity
-        move_scene: ->
-
-    {Player: Player, Creature: Creature}
+    return Entity
 )

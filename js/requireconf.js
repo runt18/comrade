@@ -5,6 +5,8 @@ require.config({
         'jquery': 'vendor/jquery-1.7.2.min',
 
         'entity': 'entity',
+        'player': 'player',
+        'creature': 'creature',
         'constants': 'constants',
 
         'plugins': 'plugins',

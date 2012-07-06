@@ -1,4 +1,8 @@
 define(['perlin'], (PerlinNoise)->
+    num_creatures = 10
+    scenes = 2
+    perlin_size = 5
+
     matrix_sub_area = (matrix, x, y, width, height)->
         (row[x..x + width] for row in matrix[y..y + height])
 
@@ -14,16 +18,18 @@ define(['perlin'], (PerlinNoise)->
                 debugger
                 window.empty_tiles.push([x, y]) unless cell in window.solid_tiles
 
+        window.creatures = (new window.Creature for x in [1..num_creatures])
+
+
     window.width = 20
     window.height = 20
-    scenes = 2
+    window.creatures = []
     window.current_scene =
         x: 0
         y: 0
     window.world_width = width * scenes
     window.world_height = height * scenes
     window.tile_size = 20
-    perlin_size = 5
     window.screen_width = width * tile_size
     window.screen_height = height * tile_size
     window.ctx = null
