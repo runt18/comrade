@@ -1,20 +1,19 @@
 // This is a port of Ken Perlin's Java code. The
 // original Java code is at http://cs.nyu.edu/%7Eperlin/noise/.
 // Note that in this version, a number from 0 to 1 is returned.
-PerlinNoise = new function() {
+define([], function(){
 
-  var permutation = [];
-  for (var i = 0; i < 256; i++) {
-    permutation.push(Math.floor(Math.random() * 256));
+  var p = [];
+  var i;
+  for (i = 0; i < 256; i++) {
+    p.push(Math.floor(Math.random() * 256));
   }
 
-  this.noise = function(x, y, z) {
+    for (i = 0; i < 256; i++){
+      p.push(p[i]);
+    }
 
-    var p = new Array(512);
-
-    for (var i = 0; i < 256; i++)
-    p[256 + i] = p[i] = permutation[i];
-
+  var PerlinNoise = function(x, y, z) {
     var X = Math.floor(x) & 255,
       // FIND UNIT CUBE THAT
       Y = Math.floor(y) & 255,
@@ -63,4 +62,5 @@ PerlinNoise = new function() {
   function scale(n) {
     return (1 + n) / 2;
   }
-};
+  return PerlinNoise;
+});

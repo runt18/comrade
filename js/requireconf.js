@@ -15,9 +15,6 @@ require.config({
     shim: {
         'keymaster': {
             exports: 'key'
-        },
-        'perlin': {
-            exports: 'PerlinNoise'
         }
         // 'backbone': {
         //     deps: ['underscore', 'jquery'],

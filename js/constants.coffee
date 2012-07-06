@@ -26,5 +26,5 @@ define(['perlin'], (PerlinNoise)->
     window.solid_tiles = [2, 3]
     window.scene = []
 
-    window.world = (block_type PerlinNoise.noise perlin_size * x / world_width, perlin_size * y / world_height, .8  for x in [0..world_width - 1] for y in [0..world_height - 1])
+    window.world = (block_type PerlinNoise perlin_size * x / world_width, perlin_size * y / world_height, .8  for x in [0..world_width - 1] for y in [0..world_height - 1])
 )

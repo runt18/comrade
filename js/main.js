@@ -2,7 +2,7 @@
 (function() {
 
   require(['jquery', 'keymaster', 'entity'], function($, key, Entities) {
-    var Creature, Player, animate, creatures, draw_block, num_creatures, player, render, tick, x;
+    var Creature, Player, animate, creatures, draw_block, keys_down, num_creatures, player, render, tick, x;
     Player = Entities.Player;
     Creature = Entities.Creature;
     draw_block = function(x, y, type) {
@@ -29,18 +29,12 @@
       return _results;
     })();
     load_scene();
-    key('w', function() {
-      return player.move('y', -1);
-    });
-    key('a', function() {
-      return player.move('x', -1);
-    });
-    key('s', function() {
-      return player.move('y', 1);
-    });
-    key('d', function() {
-      return player.move('x', 1);
-    });
+    keys_down = {
+      w: false,
+      a: false,
+      s: false,
+      d: false
+    };
     key('l', function() {
       return creatures.push(new Creature(player.in_front.x, player.in_front.y));
     });
@@ -58,13 +52,21 @@
       }
       return _results;
     });
-    key('f', function() {
-      current_scene.x = current_scene.x === 0 ? 1 : 0;
-      return load_scene();
-    });
     tick = 0;
     render = function(time) {
       var axis, creature, direction, row, tile, y, _i, _j, _k, _len, _len1, _len2;
+      if (keys_down.w) {
+        player.move('y', -1);
+      }
+      if (keys_down.a) {
+        player.move('x', -1);
+      }
+      if (keys_down.s) {
+        player.move('y', 1);
+      }
+      if (keys_down.d) {
+        player.move('x', 1);
+      }
       ctx.clearRect(0, 0, screen_width, screen_height);
       for (y = _i = 0, _len = scene.length; _i < _len; y = ++_i) {
         row = scene[y];
@@ -92,13 +94,48 @@
       return render(time);
     };
     return $(document).ready(function() {
-      var $canvas, canvas;
+      var $body, $canvas, canvas;
       $canvas = $('<canvas>');
-      $('body').append($canvas);
+      $body = $('body');
+      $body.append($canvas);
       canvas = $canvas[0];
       canvas.width = screen_width;
       canvas.height = screen_height;
       window.ctx = canvas.getContext('2d');
+      $body.keydown(function(event) {
+        var code;
+        code = event.which;
+        if (code === 87 || code === 65 || code === 83 || code === 68) {
+          event.preventDefault();
+          switch (code) {
+            case 87:
+              return keys_down.w = true;
+            case 65:
+              return keys_down.a = true;
+            case 83:
+              return keys_down.s = true;
+            case 68:
+              return keys_down.d = true;
+          }
+        }
+      });
+      $body.keyup(function(event) {
+        var code;
+        code = event.which;
+        if (code === 87 || code === 65 || code === 83 || code === 68) {
+          event.preventDefault();
+          switch (code) {
+            case 87:
+              return keys_down.w = false;
+            case 65:
+              return keys_down.a = false;
+            case 83:
+              return keys_down.s = false;
+            case 68:
+              return keys_down.d = false;
+          }
+        }
+      });
       return animate();
     });
   });

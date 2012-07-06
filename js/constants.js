@@ -49,7 +49,7 @@
           var _j, _ref1, _results1;
           _results1 = [];
           for (x = _j = 0, _ref1 = world_width - 1; 0 <= _ref1 ? _j <= _ref1 : _j >= _ref1; x = 0 <= _ref1 ? ++_j : --_j) {
-            _results1.push(block_type(PerlinNoise.noise(perlin_size * x / world_width, perlin_size * y / world_height, .8)));
+            _results1.push(block_type(PerlinNoise(perlin_size * x / world_width, perlin_size * y / world_height, .8)));
           }
           return _results1;
         })());

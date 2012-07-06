@@ -16,21 +16,11 @@ require(['jquery', 'keymaster', 'entity'], ($, key, Entities)->
 
     load_scene()
 
-    key('w', ->
-        player.move('y', -1)
-    )
-
-    key('a', ->
-        player.move('x', -1)
-    )
-
-    key('s', ->
-        player.move('y', 1)
-    )
-
-    key('d', ->
-        player.move('x', 1)
-    )
+    keys_down = 
+        w: no
+        a: no
+        s: no
+        d: no
 
     key('l', ->
         creatures.push new Creature player.in_front.x, player.in_front.y
@@ -44,15 +34,15 @@ require(['jquery', 'keymaster', 'entity'], ($, key, Entities)->
                 debugger
                 creatures.splice creatures.indexOf creature
     )
-
-    key('f', ->
-        current_scene.x = if current_scene.x is 0 then 1 else 0
-        load_scene()
-    )
-
+    
     tick = 0
 
     render = (time)->
+        player.move 'y', -1 if keys_down.w
+        player.move 'x', -1 if keys_down.a
+        player.move 'y', 1 if keys_down.s
+        player.move 'x', 1 if keys_down.d
+
         ctx.clearRect 0, 0, screen_width, screen_height
         draw_block x, y, tile for tile, x in row for row, y in scene
         
@@ -74,12 +64,34 @@ require(['jquery', 'keymaster', 'entity'], ($, key, Entities)->
 
     $(document).ready ->
         $canvas = $ '<canvas>'
-        $('body').append $canvas
+        $body = $ 'body'
+        $body.append $canvas
         canvas = $canvas[0]
 
         canvas.width = screen_width
         canvas.height = screen_height
         window.ctx = canvas.getContext '2d'
+
+
+        $body.keydown (event)->
+            code = event.which
+            if code in [87, 65, 83, 68]
+                event.preventDefault()
+                switch code
+                    when 87 then keys_down.w = yes
+                    when 65 then keys_down.a = yes
+                    when 83 then keys_down.s = yes
+                    when 68 then keys_down.d = yes
+
+        $body.keyup (event)->
+            code = event.which
+            if code in [87, 65, 83, 68]
+                event.preventDefault()
+                switch code
+                    when 87 then keys_down.w = no
+                    when 65 then keys_down.a = no
+                    when 83 then keys_down.s = no
+                    when 68 then keys_down.d = no
 
         animate()
 )
