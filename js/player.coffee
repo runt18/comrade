@@ -15,6 +15,10 @@ define(['entity'], (Entity)->
 
             load_scene() if new_scene
 
+        set_stats: ->
+            @health = 10
+            @attack = 2
+
     return Player
 
 )

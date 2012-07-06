@@ -15,6 +15,19 @@
 
       Creature.prototype.move_scene = function() {};
 
+      Creature.prototype.remove = function() {
+        return creatures.splice(creatures.indexOf(this), 1);
+      };
+
+      Creature.prototype.add = function() {
+        return creatures.push(this);
+      };
+
+      Creature.prototype.set_stats = function() {
+        this.health = 5;
+        return this.attack = 1;
+      };
+
       return Creature;
 
     })(Entity);

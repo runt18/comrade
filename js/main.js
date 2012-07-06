@@ -2,22 +2,27 @@
 (function() {
 
   require(['jquery', 'player', 'creature'], function($, Player, Creature) {
-    var animate, change_keys, draw_block, keys_down, player, render, tick;
+    var animate, change_keys, draw_block, grass, keys_down, player, render, tick, water;
     window.Creature = Creature;
     draw_block = function(x, y, type) {
+      var image;
       switch (type) {
         case 1:
-          ctx.fillStyle = 'green';
+          image = grass;
           break;
         case 2:
-          ctx.fillStyle = 'blue';
+          image = water;
           break;
         case 3:
-          ctx.fillStyle = 'brown';
+          image = water;
       }
-      return ctx.fillRect(x * tile_size, y * tile_size, tile_size, tile_size);
+      return ctx.drawImage(image, x * tile_size, y * tile_size);
     };
     load_scene();
+    grass = new Image;
+    water = new Image;
+    grass.src = 'img/sprites/grass.png';
+    water.src = 'img/sprites/water.png';
     player = new Player;
     keys_down = {
       w: false,
@@ -40,14 +45,6 @@
       }
       if (keys_down.d) {
         player.move('x', 1);
-      }
-      if (tick % 10 === 0) {
-        if (keys_down.l) {
-          creatures.push(new Creature({
-            x: player.in_front.x,
-            y: player.in_front.y
-          }));
-        }
       }
       ctx.clearRect(0, 0, screen_width, screen_height);
       for (y = _i = 0, _len = scene.length; _i < _len; y = ++_i) {
@@ -75,22 +72,54 @@
       requestAnimationFrame(animate);
       return render(time);
     };
-    change_keys = function(event, is_down) {
-      var code;
+    change_keys = function(event) {
+      var c, code, creature, is_down, type, _i, _len, _results;
+      type = event.type;
       code = event.which;
+      is_down = type === 'keydown';
       if (code === 87 || code === 65 || code === 83 || code === 68 || code === 76) {
         event.preventDefault();
         switch (code) {
           case 87:
-            return keys_down.w = is_down;
+            keys_down.w = is_down;
+            break;
           case 65:
-            return keys_down.a = is_down;
+            keys_down.a = is_down;
+            break;
           case 83:
-            return keys_down.s = is_down;
+            keys_down.s = is_down;
+            break;
           case 68:
-            return keys_down.d = is_down;
-          case 76:
-            return keys_down.l = is_down;
+            keys_down.d = is_down;
+        }
+      }
+      if (is_down) {
+        if (code === 75 || code === 76) {
+          event.preventDefault();
+          switch (code) {
+            case 76:
+              c = new Creature({
+                x: player.in_front.x,
+                y: player.in_front.y
+              });
+              return c.add();
+            case 75:
+              _results = [];
+              for (_i = 0, _len = creatures.length; _i < _len; _i++) {
+                creature = creatures[_i];
+                if (player.in_front.x === creature.pos.x && player.in_front.y === creature.pos.y) {
+                  creature.health -= player.attack;
+                  if (creature.health <= 0) {
+                    _results.push(creature.remove());
+                  } else {
+                    _results.push(void 0);
+                  }
+                } else {
+                  _results.push(void 0);
+                }
+              }
+              return _results;
+          }
         }
       }
     };
@@ -103,12 +132,8 @@
       canvas.width = screen_width;
       canvas.height = screen_height;
       window.ctx = canvas.getContext('2d');
-      $body.keydown(function(event) {
-        return change_keys(event, true);
-      });
-      $body.keyup(function(event) {
-        return change_keys(event, false);
-      });
+      $body.keydown(change_keys);
+      $body.keyup(change_keys);
       return animate();
     });
   });

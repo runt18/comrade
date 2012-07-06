@@ -10,10 +10,10 @@
         var direction, _i, _len, _ref;
         this.pos = pos;
         this.images = {
-          up: new Image(),
-          left: new Image(),
-          down: new Image(),
-          right: new Image()
+          up: new Image,
+          left: new Image,
+          down: new Image,
+          right: new Image
         };
         _ref = 'up left down right'.split(' ');
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -26,6 +26,7 @@
         this.axis = 'x';
         this.direction = 1;
         this.set_in_front();
+        this.set_stats();
       }
 
       Entity.prototype.set_position = function() {
@@ -59,6 +60,11 @@
         }
       };
 
+      Entity.prototype.snap_to_grid = function() {
+        this.pos.x = Math.round(this.pos.x);
+        return this.pos.y = Math.round(this.pos.y);
+      };
+
       Entity.prototype.draw = function() {
         return ctx.drawImage(this.image, this.pos.x * tile_size, this.pos.y * tile_size, tile_size, tile_size);
       };
@@ -67,6 +73,8 @@
         if (this.frames_left > 0) {
           this.pos[this.axis] += this.direction * 0.1;
           this.frames_left -= 1;
+        } else {
+          this.snap_to_grid();
         }
         return this.draw();
       };
@@ -76,21 +84,24 @@
         if (this.frames_left > 0) {
           return;
         }
-        this.pos.x = Math.round(this.pos.x);
-        this.pos.y = Math.round(this.pos.y);
+        this.snap_to_grid();
         this.axis = axis;
         this.direction = direction;
         this.set_image();
         this.move_scene();
         this.set_in_front();
-        if (axis === 'x') {
-          next_tile = scene[this.pos.y][this.pos.x + direction];
-        }
-        if (axis === 'y') {
-          next_tile = scene[this.pos.y + direction][this.pos.x];
-        }
-        if (__indexOf.call(solid_tiles, next_tile) < 0) {
-          return this.frames_left = 10;
+        try {
+          if (axis === 'x') {
+            next_tile = scene[this.pos.y][this.pos.x + direction];
+          }
+          if (axis === 'y') {
+            next_tile = scene[this.pos.y + direction][this.pos.x];
+          }
+          if (__indexOf.call(solid_tiles, next_tile) < 0) {
+            return this.frames_left = 10;
+          }
+        } catch (TypeError) {
+
         }
       };
 

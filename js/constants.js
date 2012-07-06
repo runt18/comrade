@@ -34,7 +34,6 @@
         row = _ref[y];
         for (x = _j = 0, _len1 = row.length; _j < _len1; x = ++_j) {
           cell = row[x];
-          debugger;
           if (__indexOf.call(window.solid_tiles, cell) < 0) {
             window.empty_tiles.push({
               x: x,

@@ -15,7 +15,6 @@ define(['perlin'], (PerlinNoise)->
         window.scene = matrix_sub_area world, current_scene.x * width, current_scene.y * height, width, height
         for row, y in window.scene
             for cell, x in row
-                debugger
                 window.empty_tiles.push(x: x, y: y) unless cell in window.solid_tiles
 
         window.creatures = (new window.Creature for x in [1..num_creatures])

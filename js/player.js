@@ -43,6 +43,11 @@
         }
       };
 
+      Player.prototype.set_stats = function() {
+        this.health = 10;
+        return this.attack = 2;
+      };
+
       return Player;
 
     })(Entity);

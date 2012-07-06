@@ -2,12 +2,17 @@ require(['jquery', 'player', 'creature'], ($, Player, Creature)->
     window.Creature = Creature
     draw_block = (x, y, type)->
         switch type
-            when 1 then ctx.fillStyle = 'green'
-            when 2 then ctx.fillStyle = 'blue'
-            when 3 then ctx.fillStyle = 'brown'
-        ctx.fillRect x * tile_size, y * tile_size, tile_size, tile_size
+            when 1 then image = grass
+            when 2 then image = water
+            when 3 then image = water   
+        ctx.drawImage(image, x * tile_size, y * tile_size)
 
     load_scene()
+
+    grass = new Image
+    water = new Image
+    grass.src = 'img/sprites/grass.png'
+    water.src = 'img/sprites/water.png'
 
     player = new Player
 
@@ -18,16 +23,6 @@ require(['jquery', 'player', 'creature'], ($, Player, Creature)->
         d: no
         l: no
 
-
-    # key('k', ->
-    #     for creature in creatures
-    #         # debugger
-
-    #         if Math.round player.in_front.x is Math.round creature.pos.x and Math.round player.in_front.y is Math.round creature.pos.y
-    #             debugger
-    #             creatures.splice creatures.indexOf creature
-    # )
-
     tick = 0
 
     render = (time)->
@@ -35,10 +30,6 @@ require(['jquery', 'player', 'creature'], ($, Player, Creature)->
         player.move 'x', -1 if keys_down.a
         player.move 'y', 1 if keys_down.s
         player.move 'x', 1 if keys_down.d
-
-        if tick % 10 is 0
-            creatures.push new Creature x: player.in_front.x, y: player.in_front.y if keys_down.l
-
 
         ctx.clearRect 0, 0, screen_width, screen_height
         draw_block x, y, tile for tile, x in row for row, y in scene
@@ -59,8 +50,11 @@ require(['jquery', 'player', 'creature'], ($, Player, Creature)->
         requestAnimationFrame animate
         render time
 
-    change_keys = (event, is_down)->
+    change_keys = (event)->
+        type = event.type
         code = event.which
+        is_down = type is 'keydown'
+        
         if code in [87, 65, 83, 68, 76]
             event.preventDefault()
             switch code
@@ -68,7 +62,20 @@ require(['jquery', 'player', 'creature'], ($, Player, Creature)->
                 when 65 then keys_down.a = is_down
                 when 83 then keys_down.s = is_down
                 when 68 then keys_down.d = is_down
-                when 76 then keys_down.l = is_down
+
+        if is_down
+            if code in [75, 76]
+                event.preventDefault()
+                switch code
+                    when 76
+                        c = new Creature x: player.in_front.x, y: player.in_front.y
+                        c.add()
+                    when 75
+                        for creature in creatures
+                            if player.in_front.x is creature.pos.x and player.in_front.y is creature.pos.y
+                                creature.health -= player.attack
+                                creature.remove() if creature.health <= 0
+
 
     $(document).ready ->
         $canvas = $ '<canvas>'
@@ -80,12 +87,9 @@ require(['jquery', 'player', 'creature'], ($, Player, Creature)->
         canvas.height = screen_height
         window.ctx = canvas.getContext '2d'
 
+        $body.keydown change_keys
 
-        $body.keydown (event)->
-            change_keys(event, yes)
-
-        $body.keyup (event)->
-            change_keys(event, no)
+        $body.keyup change_keys
 
         animate()
 )
