@@ -7,7 +7,7 @@ require.config({
         'entity': 'entity',
         'player': 'player',
         'creature': 'creature',
-        'constants': 'constants',
+        'game': 'game',
 
         'plugins': 'plugins',
         'keymaster': 'vendor/keymaster',

@@ -5,7 +5,7 @@
 
   define(['entity'], function(Entity) {
     var Creature;
-    Creature = (function(_super) {
+    return Creature = (function(_super) {
 
       __extends(Creature, _super);
 
@@ -15,14 +15,6 @@
 
       Creature.prototype.move_scene = function() {};
 
-      Creature.prototype.remove = function() {
-        return creatures.splice(creatures.indexOf(this), 1);
-      };
-
-      Creature.prototype.add = function() {
-        return creatures.push(this);
-      };
-
       Creature.prototype.set_stats = function() {
         this.health = 5;
         return this.attack = 1;
@@ -31,7 +23,6 @@
       return Creature;
 
     })(Entity);
-    return Creature;
   });
 
 }).call(this);

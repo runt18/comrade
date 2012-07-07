@@ -1,11 +1,11 @@
-require(['jquery', 'player', 'creature'], ($, Player, Creature)->
-    window.Creature = Creature
+require(['jquery', 'game', 'player', 'creature'], ($, g, player, Creature)->
     draw_block = (dx, dy, type)->
         switch type
             when 1 then sx = 1; sy = 1
             when 2 then sx = 2; sy = 1
             when 3 then sx = 3; sy = 1
-        ctx.drawImage texture_canvas, sx * tile_size, sy * tile_size, tile_size, tile_size, dx * tile_size, dy * tile_size, tile_size, tile_size
+        ts = g.tile_size
+        g.ctx.drawImage texture_canvas, sx * ts, sy * ts, ts, ts, dx * ts, dy * ts, ts, ts
 
     load_textures = ->
         textures = new Image
@@ -16,12 +16,13 @@ require(['jquery', 'player', 'creature'], ($, Player, Creature)->
         textures.onload = ->    
             texture_canvas.height = textures.height
             texture_canvas.width = textures.width
-
             texture_context.drawImage textures, 0, 0
 
-            load_scene()
+            g.load_scene()
+            window.creatures = (new Creature for x in [1..g.num_creatures])
 
-            window.player = new Player
+            animate()
+
 
     keys_down = 
         w: no
@@ -38,8 +39,8 @@ require(['jquery', 'player', 'creature'], ($, Player, Creature)->
         player.move 'y', 1 if keys_down.s
         player.move 'x', 1 if keys_down.d
 
-        ctx.clearRect 0, 0, screen_width, screen_height
-        draw_block x, y, tile for tile, x in row for row, y in scene
+        g.ctx.clearRect 0, 0, g.screen_width, g.screen_height
+        draw_block x, y, tile for tile, x in row for row, y in g.scene
         
         for creature in creatures
             if tick % 10 is 0
@@ -75,21 +76,9 @@ require(['jquery', 'player', 'creature'], ($, Player, Creature)->
                 event.preventDefault()
                 switch code
                     when 76
-                        c = new Creature x: player.in_front.x, y: player.in_front.y
-                        c.add()
+                        creatures.push new Creature x: player.in_front.x, y: player.in_front.y         
                     when 75
-                        for creature in creatures
-                            if player.in_front.x is creature.pos.x and player.in_front.y is creature.pos.y
-                                creature.health -= player.attack
-                                creature.remove() if creature.health <= 0
-
-                        tile = world[player.in_front.y][player.in_front.x]
-                        switch tile
-                            when 2
-                                player.inventory.push new Fishdddwwddwwssssas
-                            when 3
-                                player.inventory.push new Rock
-
+                        player.interact()
 
     $(document).ready ->
         $canvas = $ '<canvas>'
@@ -97,13 +86,12 @@ require(['jquery', 'player', 'creature'], ($, Player, Creature)->
         $('#game').html $canvas
         canvas = $canvas[0]
 
-        canvas.width = screen_width
-        canvas.height = screen_height
-        window.ctx = canvas.getContext '2d'
+        canvas.width = g.screen_width
+        canvas.height = g.screen_height
+        g.ctx = canvas.getContext '2d'
         
         $body.keydown change_keys
         $body.keyup change_keys
 
         load_textures()
-        animate()
 )

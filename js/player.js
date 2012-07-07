@@ -3,7 +3,7 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['entity'], function(Entity) {
+  define(['entity', 'game'], function(Entity, g) {
     var Player;
     Player = (function(_super) {
 
@@ -19,27 +19,27 @@
         _ref = [
           {
             axis: 'x',
-            dimension: width
+            dimension: g.width
           }, {
             axis: 'y',
-            dimension: height
+            dimension: g.height
           }
         ];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           item = _ref[_i];
           if (this.pos[item.axis] === 0 && this.axis === item.axis && this.direction === -1) {
             this.pos[item.axis] = item.dimension;
-            current_scene[item.axis] -= 1;
+            g.current_scene[item.axis] -= 1;
             new_scene = true;
           }
           if (this.pos[item.axis] === item.dimension - 1 && this.axis === item.axis && this.direction === 1) {
             this.pos[item.axis] = -1;
-            current_scene[item.axis] += 1;
+            g.current_scene[item.axis] += 1;
             new_scene = true;
           }
         }
         if (new_scene) {
-          return load_scene();
+          return g.load_scene();
         }
       };
 
@@ -48,10 +48,30 @@
         return this.attack = 2;
       };
 
+      Player.prototype.interact = function() {
+        var creature, tile, _i, _len;
+        for (_i = 0, _len = creatures.length; _i < _len; _i++) {
+          creature = creatures[_i];
+          if (this.in_front.x === creature.pos.x && this.in_front.y === creature.pos.y) {
+            creature.health -= this.attack;
+            if (creature.health <= 0) {
+              creature.remove();
+            }
+          }
+        }
+        tile = g.world[this.in_front.y][this.in_front.x];
+        switch (tile) {
+          case 2:
+            return this.inventory.push(new Fish);
+          case 3:
+            return this.inventory.push(new Rock);
+        }
+      };
+
       return Player;
 
     })(Entity);
-    return Player;
+    return new Player;
   });
 
 }).call(this);

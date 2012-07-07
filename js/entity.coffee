@@ -1,4 +1,4 @@
-define(['constants'], ->
+define(['game'], (g)->
     class Entity
         constructor: (@pos)->
             @images =
@@ -18,7 +18,7 @@ define(['constants'], ->
             @inventory = []
 
         set_position: ->
-            @pos = @pos or empty_tiles[Math.round Math.random() * empty_tiles.length]
+            @pos = @pos or g.empty_tiles[Math.round Math.random() * g.empty_tiles.length]
 
         set_image: ->
             switch @axis
@@ -40,7 +40,8 @@ define(['constants'], ->
             @pos.y = Math.round @pos.y
 
         draw: ->
-            ctx.drawImage texture_canvas, tile_size * @image.x, tile_size * @image.y, tile_size, tile_size, @pos.x * tile_size, @pos.y * tile_size, tile_size, tile_size
+            ts = g.tile_size
+            g.ctx.drawImage texture_canvas, ts * @image.x, ts * @image.y, ts, ts, @pos.x * ts, @pos.y * ts, ts, ts
 
         animate: ->
             if @frames_left > 0
@@ -71,13 +72,12 @@ define(['constants'], ->
             try
                 # Calculate the contents of the tile that it's trying to move to
                 if axis is 'x'
-                    next_tile = scene[@pos.y][@pos.x + direction]
+                    next_tile = g.scene[@pos.y][@pos.x + direction]
                 if axis is 'y'
-                    next_tile = scene[@pos.y + direction][@pos.x] 
+                    next_tile = g.scene[@pos.y + direction][@pos.x] 
                 
                 # Let it move if the tile isn't water or rock or something    
-                @frames_left = 10 unless next_tile in solid_tiles
+                @frames_left = 10 unless next_tile in g.solid_tiles
             catch TypeError
 
-    return Entity
 )

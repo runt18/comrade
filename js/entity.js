@@ -2,9 +2,9 @@
 (function() {
   var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-  define(['constants'], function() {
+  define(['game'], function(g) {
     var Entity;
-    Entity = (function() {
+    return Entity = (function() {
 
       function Entity(pos) {
         this.pos = pos;
@@ -37,7 +37,7 @@
       }
 
       Entity.prototype.set_position = function() {
-        return this.pos = this.pos || empty_tiles[Math.round(Math.random() * empty_tiles.length)];
+        return this.pos = this.pos || g.empty_tiles[Math.round(Math.random() * g.empty_tiles.length)];
       };
 
       Entity.prototype.set_image = function() {
@@ -73,7 +73,9 @@
       };
 
       Entity.prototype.draw = function() {
-        return ctx.drawImage(texture_canvas, tile_size * this.image.x, tile_size * this.image.y, tile_size, tile_size, this.pos.x * tile_size, this.pos.y * tile_size, tile_size, tile_size);
+        var ts;
+        ts = g.tile_size;
+        return g.ctx.drawImage(texture_canvas, ts * this.image.x, ts * this.image.y, ts, ts, this.pos.x * ts, this.pos.y * ts, ts, ts);
       };
 
       Entity.prototype.animate = function() {
@@ -99,12 +101,12 @@
         this.set_in_front();
         try {
           if (axis === 'x') {
-            next_tile = scene[this.pos.y][this.pos.x + direction];
+            next_tile = g.scene[this.pos.y][this.pos.x + direction];
           }
           if (axis === 'y') {
-            next_tile = scene[this.pos.y + direction][this.pos.x];
+            next_tile = g.scene[this.pos.y + direction][this.pos.x];
           }
-          if (__indexOf.call(solid_tiles, next_tile) < 0) {
+          if (__indexOf.call(g.solid_tiles, next_tile) < 0) {
             return this.frames_left = 10;
           }
         } catch (TypeError) {
@@ -115,7 +117,6 @@
       return Entity;
 
     })();
-    return Entity;
   });
 
 }).call(this);
