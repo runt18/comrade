@@ -4,7 +4,7 @@
   require(['jquery', 'game', 'player', 'creature'], function($, g, player, Creature) {
     var animate, change_keys, draw_block, draw_inventory, keys_down, load_textures, render, tick;
     draw_block = function(dx, dy, type) {
-      var sx, sy, ts;
+      var sx, sy;
       sy = 1;
       switch (type) {
         case 1:
@@ -15,9 +15,11 @@
           break;
         case 3:
           sx = 3;
+          break;
+        case 4:
+          sx = 4;
       }
-      ts = g.tile_size;
-      return g.ctx.drawImage(texture_canvas, sx * ts, sy * ts, ts, ts, dx * ts, dy * ts, ts, ts);
+      return g.draw_texture(sx, sy, dx, dy);
     };
     load_textures = function() {
       var texture_context, textures;
@@ -63,7 +65,7 @@
           case 3:
             sx = 3;
         }
-        _results.push(g.ctx.drawImage(texture_canvas, sx * ts, sy * ts, ts, ts, x * ts, g.screen_height - g.ui_height, ts, ts));
+        _results.push(g.draw_texture(sx, sy, x, (g.screen_height - g.ui_height) / g.tile_size));
       }
       return _results;
     };

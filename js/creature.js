@@ -20,6 +20,27 @@
         return this.attack = 1;
       };
 
+      Creature.prototype.create_images = function() {
+        return this.images = {
+          up: {
+            x: 1,
+            y: 4
+          },
+          left: {
+            x: 3,
+            y: 4
+          },
+          down: {
+            x: 2,
+            y: 4
+          },
+          right: {
+            x: 4,
+            y: 4
+          }
+        };
+      };
+
       return Creature;
 
     })(Entity);

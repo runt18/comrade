@@ -1,12 +1,14 @@
 require(['jquery', 'game', 'player', 'creature'], ($, g, player, Creature)->
+    
+
     draw_block = (dx, dy, type)->
         sy = 1
         switch type
             when 1 then sx = 1
             when 2 then sx = 2
             when 3 then sx = 3
-        ts = g.tile_size
-        g.ctx.drawImage texture_canvas, sx * ts, sy * ts, ts, ts, dx * ts, dy * ts, ts, ts
+            when 4 then sx = 4
+        g.draw_texture sx, sy, dx, dy
 
     load_textures = ->
         textures = new Image
@@ -37,8 +39,9 @@ require(['jquery', 'game', 'player', 'creature'], ($, g, player, Creature)->
                 when 3 then sx = 3
             
             # g.ctx.fillRect x * ts, g.screen_height - g.ui_height, (x + 1) * ts, g.screen_height
-            g.ctx.drawImage texture_canvas, sx * ts, sy * ts, ts, ts, x * ts, g.screen_height - g.ui_height, ts, ts
-    
+            g.draw_texture sx, sy, x, (g.screen_height - g.ui_height) / g.tile_size
+
+
     keys_down = 
         w: no
         a: no

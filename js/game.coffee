@@ -24,6 +24,11 @@ define(['perlin'], (PerlinNoise)->
             @generate_world()
             @load_scene()
 
+        draw_texture: (sx, sy, dx, dy)->
+            ts = @tile_size
+            @ctx.drawImage texture_canvas, sx * ts, sy * ts, ts, ts, dx * ts, dy * ts, ts, ts
+
+
         matrix_sub_area: (matrix, x, y, width, height)->
             (row[x..x + width] for row in matrix[y..y + height])
 
@@ -34,8 +39,9 @@ define(['perlin'], (PerlinNoise)->
             @world = world
 
         block_type: (height)->
-            return 2 if height  <= .35
-            return 1 if .35 < height < .6
+            return 2 if height <= .3
+            return 4 if .3 < height <= .4
+            return 1 if .4 < height <= .7
             3
 
         load_scene: ->

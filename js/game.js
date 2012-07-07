@@ -32,6 +32,12 @@
         this.load_scene();
       }
 
+      Game.prototype.draw_texture = function(sx, sy, dx, dy) {
+        var ts;
+        ts = this.tile_size;
+        return this.ctx.drawImage(texture_canvas, sx * ts, sy * ts, ts, ts, dx * ts, dy * ts, ts, ts);
+      };
+
       Game.prototype.matrix_sub_area = function(matrix, x, y, width, height) {
         var row, _i, _len, _ref, _results;
         _ref = matrix.slice(y, (y + height) + 1 || 9e9);
@@ -75,10 +81,13 @@
       };
 
       Game.prototype.block_type = function(height) {
-        if (height <= .35) {
+        if (height <= .3) {
           return 2;
         }
-        if ((.35 < height && height < .6)) {
+        if ((.3 < height && height <= .4)) {
+          return 4;
+        }
+        if ((.4 < height && height <= .7)) {
           return 1;
         }
         return 3;

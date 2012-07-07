@@ -8,24 +8,7 @@
 
       function Entity(pos) {
         this.pos = pos;
-        this.images = {
-          up: {
-            x: 1,
-            y: 2
-          },
-          left: {
-            x: 3,
-            y: 2
-          },
-          down: {
-            x: 2,
-            y: 2
-          },
-          right: {
-            x: 4,
-            y: 2
-          }
-        };
+        this.create_images();
         this.image = this.images.down;
         this.frames_left = 0;
         this.set_position();
@@ -73,9 +56,7 @@
       };
 
       Entity.prototype.draw = function() {
-        var ts;
-        ts = g.tile_size;
-        return g.ctx.drawImage(texture_canvas, ts * this.image.x, ts * this.image.y, ts, ts, this.pos.x * ts, this.pos.y * ts, ts, ts);
+        return g.draw_texture(this.image.x, this.image.y, this.pos.x, this.pos.y);
       };
 
       Entity.prototype.animate = function() {

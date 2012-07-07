@@ -1,11 +1,7 @@
 define(['game'], (g)->
     class Entity
         constructor: (@pos)->
-            @images =
-                up: x: 1, y: 2
-                left: x: 3, y: 2
-                down: x: 2, y: 2
-                right: x: 4, y: 2
+            @create_images()
             
             @image = @images.down
 
@@ -40,8 +36,7 @@ define(['game'], (g)->
             @pos.y = Math.round @pos.y
 
         draw: ->
-            ts = g.tile_size
-            g.ctx.drawImage texture_canvas, ts * @image.x, ts * @image.y, ts, ts, @pos.x * ts, @pos.y * ts, ts, ts
+            g.draw_texture @image.x, @image.y, @pos.x, @pos.y
 
         animate: ->
             if @frames_left > 0
