@@ -7,19 +7,25 @@
     Entity = (function() {
 
       function Entity(pos) {
-        var direction, _i, _len, _ref;
         this.pos = pos;
         this.images = {
-          up: new Image,
-          left: new Image,
-          down: new Image,
-          right: new Image
+          up: {
+            x: 1,
+            y: 2
+          },
+          left: {
+            x: 3,
+            y: 2
+          },
+          down: {
+            x: 2,
+            y: 2
+          },
+          right: {
+            x: 4,
+            y: 2
+          }
         };
-        _ref = 'up left down right'.split(' ');
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          direction = _ref[_i];
-          this.images[direction].src = "img/sprites/player/" + direction + ".png";
-        }
         this.image = this.images.down;
         this.frames_left = 0;
         this.set_position();
@@ -27,6 +33,7 @@
         this.direction = 1;
         this.set_in_front();
         this.set_stats();
+        this.inventory = [];
       }
 
       Entity.prototype.set_position = function() {
@@ -66,7 +73,7 @@
       };
 
       Entity.prototype.draw = function() {
-        return ctx.drawImage(this.image, this.pos.x * tile_size, this.pos.y * tile_size, tile_size, tile_size);
+        return ctx.drawImage(texture_canvas, tile_size * this.image.x, tile_size * this.image.y, tile_size, tile_size, this.pos.x * tile_size, this.pos.y * tile_size, tile_size, tile_size);
       };
 
       Entity.prototype.animate = function() {

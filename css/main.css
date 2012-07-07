@@ -459,6 +459,35 @@ h1{
     width: 900px;
 }
 
+#game-wrap{
+    position: relative;
+}
+
+#overlay{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background: black;
+    top: 0;
+    left: 0;
+    display: none;
+}
+
+#ui{
+    height: 50px;
+    width: 100%;
+    background: #44250e;
+}
+
+#inventory li{
+    list-style: none;
+    float: left;
+    height: 40px;
+    width: 40px;
+    margin: 5px;
+    border: 1px solid black;
+}
+
 
 
 

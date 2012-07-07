@@ -2,28 +2,39 @@
 (function() {
 
   require(['jquery', 'player', 'creature'], function($, Player, Creature) {
-    var animate, change_keys, draw_block, grass, keys_down, player, render, tick, water;
+    var animate, change_keys, draw_block, keys_down, load_textures, render, tick;
     window.Creature = Creature;
-    draw_block = function(x, y, type) {
-      var image;
+    draw_block = function(dx, dy, type) {
+      var sx, sy;
       switch (type) {
         case 1:
-          image = grass;
+          sx = 1;
+          sy = 1;
           break;
         case 2:
-          image = water;
+          sx = 2;
+          sy = 1;
           break;
         case 3:
-          image = water;
+          sx = 3;
+          sy = 1;
       }
-      return ctx.drawImage(image, x * tile_size, y * tile_size);
+      return ctx.drawImage(texture_canvas, sx * tile_size, sy * tile_size, tile_size, tile_size, dx * tile_size, dy * tile_size, tile_size, tile_size);
     };
-    load_scene();
-    grass = new Image;
-    water = new Image;
-    grass.src = 'img/sprites/grass.png';
-    water.src = 'img/sprites/water.png';
-    player = new Player;
+    load_textures = function() {
+      var texture_context, textures;
+      textures = new Image;
+      textures.src = 'img/sprites/textures.png';
+      window.texture_canvas = $('<canvas>')[0];
+      texture_context = texture_canvas.getContext('2d');
+      return textures.onload = function() {
+        texture_canvas.height = textures.height;
+        texture_canvas.width = textures.width;
+        texture_context.drawImage(textures, 0, 0);
+        load_scene();
+        return window.player = new Player;
+      };
+    };
     keys_down = {
       w: false,
       a: false,
@@ -73,7 +84,7 @@
       return render(time);
     };
     change_keys = function(event) {
-      var c, code, creature, is_down, type, _i, _len, _results;
+      var c, code, creature, is_down, tile, type, _i, _len;
       type = event.type;
       code = event.which;
       is_down = type === 'keydown';
@@ -104,21 +115,22 @@
               });
               return c.add();
             case 75:
-              _results = [];
               for (_i = 0, _len = creatures.length; _i < _len; _i++) {
                 creature = creatures[_i];
                 if (player.in_front.x === creature.pos.x && player.in_front.y === creature.pos.y) {
                   creature.health -= player.attack;
                   if (creature.health <= 0) {
-                    _results.push(creature.remove());
-                  } else {
-                    _results.push(void 0);
+                    creature.remove();
                   }
-                } else {
-                  _results.push(void 0);
                 }
               }
-              return _results;
+              tile = world[player.in_front.y][player.in_front.x];
+              switch (tile) {
+                case 2:
+                  return player.inventory.push(new Fishdddwwddwwssssas);
+                case 3:
+                  return player.inventory.push(new Rock);
+              }
           }
         }
       }
@@ -134,6 +146,7 @@
       window.ctx = canvas.getContext('2d');
       $body.keydown(change_keys);
       $body.keyup(change_keys);
+      load_textures();
       return animate();
     });
   });

@@ -1,16 +1,12 @@
 define(['constants'], ->
     class Entity
-        constructor: (pos)->
-            @pos = pos
+        constructor: (@pos)->
             @images =
-                up: new Image
-                left: new Image
-                down: new Image
-                right: new Image
+                up: x: 1, y: 2
+                left: x: 3, y: 2
+                down: x: 2, y: 2
+                right: x: 4, y: 2
             
-            for direction in 'up left down right'.split ' '
-                @images[direction].src = "img/sprites/player/#{ direction }.png"
-
             @image = @images.down
 
             @frames_left = 0
@@ -19,6 +15,7 @@ define(['constants'], ->
             @direction = 1
             @set_in_front()
             @set_stats()
+            @inventory = []
 
         set_position: ->
             @pos = @pos or empty_tiles[Math.round Math.random() * empty_tiles.length]
@@ -43,7 +40,7 @@ define(['constants'], ->
             @pos.y = Math.round @pos.y
 
         draw: ->
-            ctx.drawImage @image, @pos.x * tile_size, @pos.y * tile_size, tile_size, tile_size
+            ctx.drawImage texture_canvas, tile_size * @image.x, tile_size * @image.y, tile_size, tile_size, @pos.x * tile_size, @pos.y * tile_size, tile_size, tile_size
 
         animate: ->
             if @frames_left > 0

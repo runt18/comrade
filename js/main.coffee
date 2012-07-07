@@ -1,20 +1,27 @@
 require(['jquery', 'player', 'creature'], ($, Player, Creature)->
     window.Creature = Creature
-    draw_block = (x, y, type)->
+    draw_block = (dx, dy, type)->
         switch type
-            when 1 then image = grass
-            when 2 then image = water
-            when 3 then image = water   
-        ctx.drawImage(image, x * tile_size, y * tile_size)
+            when 1 then sx = 1; sy = 1
+            when 2 then sx = 2; sy = 1
+            when 3 then sx = 3; sy = 1
+        ctx.drawImage texture_canvas, sx * tile_size, sy * tile_size, tile_size, tile_size, dx * tile_size, dy * tile_size, tile_size, tile_size
 
-    load_scene()
+    load_textures = ->
+        textures = new Image
+        textures.src = 'img/sprites/textures.png'
+        window.texture_canvas = $('<canvas>')[0]
+        texture_context = texture_canvas.getContext '2d'
+        
+        textures.onload = ->    
+            texture_canvas.height = textures.height
+            texture_canvas.width = textures.width
 
-    grass = new Image
-    water = new Image
-    grass.src = 'img/sprites/grass.png'
-    water.src = 'img/sprites/water.png'
+            texture_context.drawImage textures, 0, 0
 
-    player = new Player
+            load_scene()
+
+            window.player = new Player
 
     keys_down = 
         w: no
@@ -76,6 +83,13 @@ require(['jquery', 'player', 'creature'], ($, Player, Creature)->
                                 creature.health -= player.attack
                                 creature.remove() if creature.health <= 0
 
+                        tile = world[player.in_front.y][player.in_front.x]
+                        switch tile
+                            when 2
+                                player.inventory.push new Fishdddwwddwwssssas
+                            when 3
+                                player.inventory.push new Rock
+
 
     $(document).ready ->
         $canvas = $ '<canvas>'
@@ -86,10 +100,10 @@ require(['jquery', 'player', 'creature'], ($, Player, Creature)->
         canvas.width = screen_width
         canvas.height = screen_height
         window.ctx = canvas.getContext '2d'
-
+        
         $body.keydown change_keys
-
         $body.keyup change_keys
 
+        load_textures()
         animate()
 )
