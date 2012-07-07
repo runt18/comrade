@@ -1,5 +1,20 @@
 define(['entity', 'game'], (Entity, g)->
 
+    class Item
+        constructor: ->
+            @set_id()
+
+    class Log extends Item
+        set_id: -> @id = 1
+
+    class Fish extends Item
+        set_id: -> @id = 2
+
+    class Rock extends Item
+        set_id: -> @id = 3
+
+
+
     class Player extends Entity
         move_scene: ->
             new_scene = false

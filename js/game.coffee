@@ -2,6 +2,7 @@ define(['perlin'], (PerlinNoise)->
     class Game
         constructor: ->
             @num_creatures = 10
+            @ui_height = 30
             scenes = 2
             @perlin_size = 5
             @width = 30
@@ -14,7 +15,7 @@ define(['perlin'], (PerlinNoise)->
             @world_height = @height * scenes
             @tile_size = 30
             @screen_width = @width * @tile_size
-            @screen_height = @height * @tile_size
+            @screen_height = @height * @tile_size + @ui_height
             @ctx = null
             @solid_tiles = [2, 3]
             @scene = []

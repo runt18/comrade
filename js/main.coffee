@@ -1,15 +1,16 @@
 require(['jquery', 'game', 'player', 'creature'], ($, g, player, Creature)->
     draw_block = (dx, dy, type)->
+        sy = 1
         switch type
-            when 1 then sx = 1; sy = 1
-            when 2 then sx = 2; sy = 1
-            when 3 then sx = 3; sy = 1
+            when 1 then sx = 1
+            when 2 then sx = 2
+            when 3 then sx = 3
         ts = g.tile_size
         g.ctx.drawImage texture_canvas, sx * ts, sy * ts, ts, ts, dx * ts, dy * ts, ts, ts
 
     load_textures = ->
         textures = new Image
-        textures.src = 'img/sprites/textures.png'
+        textures.src = 'img/textures.png'
         window.texture_canvas = $('<canvas>')[0]
         texture_context = texture_canvas.getContext '2d'
         
@@ -23,13 +24,28 @@ require(['jquery', 'game', 'player', 'creature'], ($, g, player, Creature)->
 
             animate()
 
-
+    draw_inventory = ->
+        g.ctx.fillStyle = 'grey'
+        g.ctx.fillRect 0, g.screen_height - g.ui_height, g.screen_width, g.screen_height
+        g.ctx.fillStyle = 'blue'
+        ts = g.tile_size
+        for item, x in player.inventory
+            sy = 3
+            switch item.id
+                when 1 then sx = 1
+                when 2 then sx = 2
+                when 3 then sx = 3
+            
+            # g.ctx.fillRect x * ts, g.screen_height - g.ui_height, (x + 1) * ts, g.screen_height
+            g.ctx.drawImage texture_canvas, sx * ts, sy * ts, ts, ts, x * ts, g.screen_height - g.ui_height, ts, ts
+    
     keys_down = 
         w: no
         a: no
         s: no
         d: no
         l: no
+        k: no
 
     tick = 0
 
@@ -38,6 +54,13 @@ require(['jquery', 'game', 'player', 'creature'], ($, g, player, Creature)->
         player.move 'x', -1 if keys_down.a
         player.move 'y', 1 if keys_down.s
         player.move 'x', 1 if keys_down.d
+
+        if tick % 200 is 0
+            if keys_down.l
+                creatures.push new Creature x: player.in_front.x, y: player.in_front.y         
+            if keys_down.k
+                player.interact()
+
 
         g.ctx.clearRect 0, 0, g.screen_width, g.screen_height
         draw_block x, y, tile for tile, x in row for row, y in g.scene
@@ -52,6 +75,8 @@ require(['jquery', 'game', 'player', 'creature'], ($, g, player, Creature)->
         
         player.animate()
 
+        draw_inventory()
+
         tick += 1
 
     animate = (time)->
@@ -63,22 +88,15 @@ require(['jquery', 'game', 'player', 'creature'], ($, g, player, Creature)->
         code = event.which
         is_down = type is 'keydown'
         
-        if code in [87, 65, 83, 68, 76]
+        if code in [87, 65, 83, 68, 75, 76]
             event.preventDefault()
             switch code
                 when 87 then keys_down.w = is_down
                 when 65 then keys_down.a = is_down
                 when 83 then keys_down.s = is_down
                 when 68 then keys_down.d = is_down
-
-        if is_down
-            if code in [75, 76]
-                event.preventDefault()
-                switch code
-                    when 76
-                        creatures.push new Creature x: player.in_front.x, y: player.in_front.y         
-                    when 75
-                        player.interact()
+                when 75 then keys_down.k = is_down
+                when 76 then keys_down.l = is_down
 
     $(document).ready ->
         $canvas = $ '<canvas>'

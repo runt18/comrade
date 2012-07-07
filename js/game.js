@@ -9,6 +9,7 @@
       function Game() {
         var scenes;
         this.num_creatures = 10;
+        this.ui_height = 30;
         scenes = 2;
         this.perlin_size = 5;
         this.width = 30;
@@ -22,7 +23,7 @@
         this.world_height = this.height * scenes;
         this.tile_size = 30;
         this.screen_width = this.width * this.tile_size;
-        this.screen_height = this.height * this.tile_size;
+        this.screen_height = this.height * this.tile_size + this.ui_height;
         this.ctx = null;
         this.solid_tiles = [2, 3];
         this.scene = [];

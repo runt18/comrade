@@ -2,21 +2,19 @@
 (function() {
 
   require(['jquery', 'game', 'player', 'creature'], function($, g, player, Creature) {
-    var animate, change_keys, draw_block, keys_down, load_textures, render, tick;
+    var animate, change_keys, draw_block, draw_inventory, keys_down, load_textures, render, tick;
     draw_block = function(dx, dy, type) {
       var sx, sy, ts;
+      sy = 1;
       switch (type) {
         case 1:
           sx = 1;
-          sy = 1;
           break;
         case 2:
           sx = 2;
-          sy = 1;
           break;
         case 3:
           sx = 3;
-          sy = 1;
       }
       ts = g.tile_size;
       return g.ctx.drawImage(texture_canvas, sx * ts, sy * ts, ts, ts, dx * ts, dy * ts, ts, ts);
@@ -24,7 +22,7 @@
     load_textures = function() {
       var texture_context, textures;
       textures = new Image;
-      textures.src = 'img/sprites/textures.png';
+      textures.src = 'img/textures.png';
       window.texture_canvas = $('<canvas>')[0];
       texture_context = texture_canvas.getContext('2d');
       return textures.onload = function() {
@@ -44,12 +42,38 @@
         return animate();
       };
     };
+    draw_inventory = function() {
+      var item, sx, sy, ts, x, _i, _len, _ref, _results;
+      g.ctx.fillStyle = 'grey';
+      g.ctx.fillRect(0, g.screen_height - g.ui_height, g.screen_width, g.screen_height);
+      g.ctx.fillStyle = 'blue';
+      ts = g.tile_size;
+      _ref = player.inventory;
+      _results = [];
+      for (x = _i = 0, _len = _ref.length; _i < _len; x = ++_i) {
+        item = _ref[x];
+        sy = 3;
+        switch (item.id) {
+          case 1:
+            sx = 1;
+            break;
+          case 2:
+            sx = 2;
+            break;
+          case 3:
+            sx = 3;
+        }
+        _results.push(g.ctx.drawImage(texture_canvas, sx * ts, sy * ts, ts, ts, x * ts, g.screen_height - g.ui_height, ts, ts));
+      }
+      return _results;
+    };
     keys_down = {
       w: false,
       a: false,
       s: false,
       d: false,
-      l: false
+      l: false,
+      k: false
     };
     tick = 0;
     render = function(time) {
@@ -65,6 +89,17 @@
       }
       if (keys_down.d) {
         player.move('x', 1);
+      }
+      if (tick % 200 === 0) {
+        if (keys_down.l) {
+          creatures.push(new Creature({
+            x: player.in_front.x,
+            y: player.in_front.y
+          }));
+        }
+        if (keys_down.k) {
+          player.interact();
+        }
       }
       g.ctx.clearRect(0, 0, g.screen_width, g.screen_height);
       _ref = g.scene;
@@ -87,6 +122,7 @@
         creature.animate();
       }
       player.animate();
+      draw_inventory();
       return tick += 1;
     };
     animate = function(time) {
@@ -98,34 +134,21 @@
       type = event.type;
       code = event.which;
       is_down = type === 'keydown';
-      if (code === 87 || code === 65 || code === 83 || code === 68 || code === 76) {
+      if (code === 87 || code === 65 || code === 83 || code === 68 || code === 75 || code === 76) {
         event.preventDefault();
         switch (code) {
           case 87:
-            keys_down.w = is_down;
-            break;
+            return keys_down.w = is_down;
           case 65:
-            keys_down.a = is_down;
-            break;
+            return keys_down.a = is_down;
           case 83:
-            keys_down.s = is_down;
-            break;
+            return keys_down.s = is_down;
           case 68:
-            keys_down.d = is_down;
-        }
-      }
-      if (is_down) {
-        if (code === 75 || code === 76) {
-          event.preventDefault();
-          switch (code) {
-            case 76:
-              return creatures.push(new Creature({
-                x: player.in_front.x,
-                y: player.in_front.y
-              }));
-            case 75:
-              return player.interact();
-          }
+            return keys_down.d = is_down;
+          case 75:
+            return keys_down.k = is_down;
+          case 76:
+            return keys_down.l = is_down;
         }
       }
     };

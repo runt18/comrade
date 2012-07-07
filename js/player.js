@@ -4,7 +4,61 @@
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   define(['entity', 'game'], function(Entity, g) {
-    var Player;
+    var Fish, Item, Log, Player, Rock;
+    Item = (function() {
+
+      function Item() {
+        this.set_id();
+      }
+
+      return Item;
+
+    })();
+    Log = (function(_super) {
+
+      __extends(Log, _super);
+
+      function Log() {
+        return Log.__super__.constructor.apply(this, arguments);
+      }
+
+      Log.prototype.set_id = function() {
+        return this.id = 1;
+      };
+
+      return Log;
+
+    })(Item);
+    Fish = (function(_super) {
+
+      __extends(Fish, _super);
+
+      function Fish() {
+        return Fish.__super__.constructor.apply(this, arguments);
+      }
+
+      Fish.prototype.set_id = function() {
+        return this.id = 2;
+      };
+
+      return Fish;
+
+    })(Item);
+    Rock = (function(_super) {
+
+      __extends(Rock, _super);
+
+      function Rock() {
+        return Rock.__super__.constructor.apply(this, arguments);
+      }
+
+      Rock.prototype.set_id = function() {
+        return this.id = 3;
+      };
+
+      return Rock;
+
+    })(Item);
     Player = (function(_super) {
 
       __extends(Player, _super);
