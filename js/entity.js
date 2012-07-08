@@ -2,7 +2,7 @@
 (function() {
   var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-  define(['game', 'scene'], function(g, s) {
+  define(['game', 'scene', 'renderer'], function(g, s, r) {
     var Entity, Slot;
     Slot = (function() {
 
@@ -76,7 +76,7 @@
       };
 
       Entity.prototype.draw = function() {
-        return g.draw_texture(this.image.x, this.image.y, this.pos.x, this.pos.y);
+        return r.draw_texture(this.image.x, this.image.y, this.pos.x, this.pos.y);
       };
 
       Entity.prototype.animate = function() {

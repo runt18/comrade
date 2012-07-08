@@ -1,4 +1,4 @@
-define(['game', 'scene'], (g, s)->
+define(['game', 'scene', 'renderer'], (g, s, r)->
     class Slot
         constructor: ->
             @item = 
@@ -42,7 +42,7 @@ define(['game', 'scene'], (g, s)->
             @pos.y = Math.round @pos.y
 
         draw: ->
-            g.draw_texture @image.x, @image.y, @pos.x, @pos.y
+            r.draw_texture @image.x, @image.y, @pos.x, @pos.y
 
         animate: ->
             if @frames_left > 0

@@ -20,7 +20,6 @@
         this.num_trees = 100;
         this.perlin_size = 5;
         this.perlin_z_axis = .8;
-        this.ctx = null;
         this.solid_tiles = [2, 3];
         this.solid_objects = [1];
         this.empty_tiles = [];
@@ -57,12 +56,6 @@
         this.generate_world();
         this.add_trees();
       }
-
-      Game.prototype.draw_texture = function(sx, sy, dx, dy) {
-        var ts;
-        ts = this.tile_size;
-        return this.ctx.drawImage(texture_canvas, sx * ts, sy * ts, ts, ts, dx * ts, dy * ts, ts, ts);
-      };
 
       Game.prototype.add_trees = function() {
         var i, index, potential_trees, tree, trees, _i, _j, _len, _ref, _results;

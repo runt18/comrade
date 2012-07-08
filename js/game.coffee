@@ -29,8 +29,6 @@ define(['underscore', 'perlin'], (_, PerlinNoise)->
             # TODO: Fix circular dependency and stop storing the array of creatures in a global variable
             # @creatures = []
 
-            @ctx = null
-
             # IDs of tiles and objects that entities cannot walk through
             @solid_tiles = [2, 3]
             @solid_objects = [1]
@@ -45,10 +43,6 @@ define(['underscore', 'perlin'], (_, PerlinNoise)->
 
             @generate_world()
             @add_trees()
-
-        draw_texture: (sx, sy, dx, dy)->
-            ts = @tile_size
-            @ctx.drawImage texture_canvas, sx * ts, sy * ts, ts, ts, dx * ts, dy * ts, ts, ts
 
         add_trees: ->
             potential_trees = _.clone(@empty_tiles)

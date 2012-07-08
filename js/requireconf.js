@@ -9,11 +9,13 @@ require.config({
         'creature': 'creature',
         'game': 'game',
         'scene': 'scene',
+        'renderer': 'renderer',
 
         'plugins': 'plugins',
         'keymaster': 'vendor/keymaster',
         'underscore': 'vendor/underscore',
-        'perlin': 'vendor/perlin'
+        'perlin': 'vendor/perlin',
+        'stats': 'vendor/stats'
     },
 
     shim: {
