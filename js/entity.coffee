@@ -1,4 +1,4 @@
-define(['game'], (g)->
+define(['game', 'scene'], (g, s)->
     class Slot
         constructor: ->
             @item = 
@@ -20,7 +20,7 @@ define(['game'], (g)->
             @inventory = (new Slot for x in [1..10])
 
         set_position: ->
-            @pos = @pos or g.scene_empty_tiles[Math.round Math.random() * g.scene_empty_tiles.length]
+            @pos = @pos or s.current.empty_tiles[Math.round Math.random() * s.current.empty_tiles.length]
 
         set_image: ->
             switch @axis
@@ -73,11 +73,11 @@ define(['game'], (g)->
             try
                 # Calculate the contents of the tile that it's trying to move to
                 if axis is 'x'
-                    next_tile = g.scene[@pos.y][@pos.x + direction]
-                    next_object = g.objects[@pos.y][@pos.x + direction]
+                    next_tile = s.current.tiles[@pos.y][@pos.x + direction]
+                    next_object = s.current.objects[@pos.y][@pos.x + direction]
                 if axis is 'y'
-                    next_tile = g.scene[@pos.y + direction][@pos.x] 
-                    next_object = g.objects[@pos.y + direction][@pos.x] 
+                    next_tile = s.current.tiles[@pos.y + direction][@pos.x] 
+                    next_object = s.current.objects[@pos.y + direction][@pos.x] 
                 
                 # Let it move if the tile isn't water or rock or something    
                 @frames_left = 10 unless next_tile in g.solid_tiles or next_object in g.solid_objects

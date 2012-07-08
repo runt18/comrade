@@ -7,29 +7,23 @@
     Game = (function() {
 
       function Game() {
-        var scenes, x, y;
-        this.num_creatures = 10;
+        var x, y;
         this.ui_height = 30;
-        this.num_trees = 100;
-        scenes = 2;
-        this.perlin_size = 5;
         this.width = 30;
         this.height = 20;
-        this.creatures = [];
-        this.current_scene = {
-          x: 0,
-          y: 0
-        };
-        this.world_width = this.width * scenes;
-        this.world_height = this.height * scenes;
         this.tile_size = 30;
         this.screen_width = this.width * this.tile_size;
         this.screen_height = this.height * this.tile_size + this.ui_height;
+        this.world_width = this.width * 2;
+        this.world_height = this.height * 2;
+        this.num_creatures = 10;
+        this.num_trees = 100;
+        this.perlin_size = 5;
+        this.perlin_z_axis = .8;
         this.ctx = null;
         this.solid_tiles = [2, 3];
-        this.scene = [];
+        this.solid_objects = [1];
         this.empty_tiles = [];
-        this.scene_empty_tiles = [];
         this.objects = (function() {
           var _i, _ref, _results;
           _results = [];
@@ -45,9 +39,22 @@
           }
           return _results;
         }).call(this);
-        this.solid_objects = [1];
+        this.world = (function() {
+          var _i, _ref, _results;
+          _results = [];
+          for (y = _i = 1, _ref = this.world_height; 1 <= _ref ? _i <= _ref : _i >= _ref; y = 1 <= _ref ? ++_i : --_i) {
+            _results.push((function() {
+              var _j, _ref1, _results1;
+              _results1 = [];
+              for (x = _j = 1, _ref1 = this.world_width; 1 <= _ref1 ? _j <= _ref1 : _j >= _ref1; x = 1 <= _ref1 ? ++_j : --_j) {
+                _results1.push(3);
+              }
+              return _results1;
+            }).call(this));
+          }
+          return _results;
+        }).call(this);
         this.generate_world();
-        this.load_scene();
         this.add_trees();
       }
 
@@ -73,56 +80,17 @@
         return _results;
       };
 
-      Game.prototype.matrix_sub_area = function(matrix, x, y, width, height) {
-        var row, _i, _len, _ref, _results;
-        _ref = matrix.slice(y, (y + height) + 1 || 9e9);
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          row = _ref[_i];
-          _results.push(row.slice(x, (x + width) + 1 || 9e9));
-        }
-        return _results;
-      };
-
       Game.prototype.generate_world = function() {
-        var cell, row, world, x, y, _i, _j, _len, _ref, _ref1, _results;
-        world = (function() {
-          var _i, _ref, _results;
-          _results = [];
-          for (y = _i = 0, _ref = this.world_height - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; y = 0 <= _ref ? ++_i : --_i) {
-            _results.push((function() {
-              var _j, _ref1, _results1;
-              _results1 = [];
-              for (x = _j = 0, _ref1 = this.world_width - 1; 0 <= _ref1 ? _j <= _ref1 : _j >= _ref1; x = 0 <= _ref1 ? ++_j : --_j) {
-                _results1.push(this.block_type(PerlinNoise(this.perlin_size * x / this.world_width, this.perlin_size * y / this.world_height, .8)));
-              }
-              return _results1;
-            }).call(this));
-          }
-          return _results;
-        }).call(this);
-        world[this.world_height - 1] = world[0] = (function() {
-          var _i, _ref, _results;
-          _results = [];
-          for (x = _i = 0, _ref = this.world_width - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; x = 0 <= _ref ? ++_i : --_i) {
-            _results.push(3);
-          }
-          return _results;
-        }).call(this);
-        for (x = _i = 0, _ref = this.world_height - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; x = 0 <= _ref ? ++_i : --_i) {
-          world[x][this.world_width - 1] = world[x][0] = 3;
-        }
-        this.world = world;
-        _ref1 = this.world;
+        var tile, x, y, _i, _ref, _results;
         _results = [];
-        for (y = _j = 0, _len = _ref1.length; _j < _len; y = ++_j) {
-          row = _ref1[y];
+        for (y = _i = 1, _ref = this.world_height - 2; 1 <= _ref ? _i <= _ref : _i >= _ref; y = 1 <= _ref ? ++_i : --_i) {
           _results.push((function() {
-            var _k, _len1, _results1;
+            var _j, _ref1, _results1;
             _results1 = [];
-            for (x = _k = 0, _len1 = row.length; _k < _len1; x = ++_k) {
-              cell = row[x];
-              if (__indexOf.call(this.solid_tiles, cell) < 0) {
+            for (x = _j = 1, _ref1 = this.world_width - 2; 1 <= _ref1 ? _j <= _ref1 : _j >= _ref1; x = 1 <= _ref1 ? ++_j : --_j) {
+              tile = this.block_type(PerlinNoise(this.perlin_size * x / this.world_width, this.perlin_size * y / this.world_height, this.perlin_z_axis));
+              this.world[y][x] = tile;
+              if (__indexOf.call(this.solid_tiles, tile) < 0) {
                 _results1.push(this.empty_tiles.push({
                   x: x,
                   y: y
@@ -148,34 +116,6 @@
           return 1;
         }
         return 3;
-      };
-
-      Game.prototype.load_scene = function() {
-        var cell, row, x, y, _i, _len, _ref, _results;
-        this.scene = this.matrix_sub_area(this.world, this.current_scene.x * this.width, this.current_scene.y * this.height, this.width, this.height);
-        this.scene_objects = this.matrix_sub_area(this.objects, this.current_scene.x * this.width, this.current_scene.y * this.height, this.width, this.height);
-        _ref = this.scene;
-        _results = [];
-        for (y = _i = 0, _len = _ref.length; _i < _len; y = ++_i) {
-          row = _ref[y];
-          _results.push((function() {
-            var _j, _len1, _results1;
-            _results1 = [];
-            for (x = _j = 0, _len1 = row.length; _j < _len1; x = ++_j) {
-              cell = row[x];
-              if (__indexOf.call(this.solid_tiles, cell) < 0) {
-                _results1.push(this.scene_empty_tiles.push({
-                  x: x,
-                  y: y
-                }));
-              } else {
-                _results1.push(void 0);
-              }
-            }
-            return _results1;
-          }).call(this));
-        }
-        return _results;
       };
 
       return Game;

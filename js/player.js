@@ -3,7 +3,7 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['underscore', 'entity', 'game'], function(_, Entity, g) {
+  define(['underscore', 'entity', 'game', 'scene'], function(_, Entity, g, s) {
     var Fish, Item, Log, Player, Rock;
     Item = (function() {
 
@@ -83,17 +83,17 @@
           item = _ref[_i];
           if (this.pos[item.axis] === 0 && this.axis === item.axis && this.direction === -1) {
             this.pos[item.axis] = item.dimension;
-            g.current_scene[item.axis] -= 1;
+            s.pos[item.axis] -= 1;
             new_scene = true;
           }
           if (this.pos[item.axis] === item.dimension - 1 && this.axis === item.axis && this.direction === 1) {
             this.pos[item.axis] = -1;
-            g.current_scene[item.axis] += 1;
+            s.pos[item.axis] += 1;
             new_scene = true;
           }
         }
         if (new_scene) {
-          return g.load_scene();
+          return s.set();
         }
       };
 
@@ -136,7 +136,7 @@
           }
         }
         tile = g.world[this.in_front.y][this.in_front.x];
-        object = g.objects[this.in_front.y][this.in_front.x];
+        object = s.current.objects[this.in_front.y][this.in_front.x];
         if (object !== 0) {
           tile = object;
         }

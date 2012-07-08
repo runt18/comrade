@@ -1,6 +1,5 @@
-require(['jquery', 'game', 'player', 'creature'], ($, g, player, Creature)->
+require(['jquery', 'game', 'scene', 'player', 'creature'], ($, g, s, player, Creature)->
     
-
     draw_block = (dx, dy, type)->
         sy = 1
         switch type
@@ -28,7 +27,7 @@ require(['jquery', 'game', 'player', 'creature'], ($, g, player, Creature)->
             texture_canvas.width = textures.width
             texture_context.drawImage textures, 0, 0
 
-            g.load_scene()
+            # s.load()
             window.creatures = (new Creature for x in [1..g.num_creatures])
 
             animate()
@@ -74,8 +73,8 @@ require(['jquery', 'game', 'player', 'creature'], ($, g, player, Creature)->
 
 
         g.ctx.clearRect 0, 0, g.screen_width, g.screen_height
-        draw_block x, y, tile for tile, x in row for row, y in g.scene
-        draw_object x, y, object for object, x in row for row, y in g.scene_objects
+        draw_block x, y, tile for tile, x in row for row, y in s.current.tiles
+        draw_object x, y, object for object, x in row for row, y in s.current.objects
 
         for creature in creatures
             if tick % 10 is 0

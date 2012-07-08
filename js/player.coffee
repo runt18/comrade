@@ -1,4 +1,4 @@
-define(['underscore', 'entity', 'game'], (_, Entity, g)->
+define(['underscore', 'entity', 'game', 'scene'], (_, Entity, g, s)->
 
     class Item
         constructor: ->
@@ -13,22 +13,20 @@ define(['underscore', 'entity', 'game'], (_, Entity, g)->
     class Rock extends Item
         set_id: -> @id = 3
 
-
-
     class Player extends Entity
         move_scene: ->
             new_scene = false
             for item in [{axis: 'x', dimension: g.width}, {axis: 'y', dimension: g.height}]
                 if @pos[item.axis] is 0 and @axis is item.axis and @direction is -1
                     @pos[item.axis] = item.dimension
-                    g.current_scene[item.axis] -= 1
+                    s.pos[item.axis] -= 1
                     new_scene = true
                 if @pos[item.axis] is item.dimension - 1 and @axis is item.axis and @direction is 1
                     @pos[item.axis] = -1
-                    g.current_scene[item.axis] += 1
+                    s.pos[item.axis] += 1
                     new_scene = true
 
-            g.load_scene() if new_scene
+            s.set() if new_scene
 
         create_images: ->
             @images =
@@ -49,7 +47,7 @@ define(['underscore', 'entity', 'game'], (_, Entity, g)->
                     return
 
             tile = g.world[@in_front.y][@in_front.x]
-            object = g.objects[@in_front.y][@in_front.x]
+            object = s.current.objects[@in_front.y][@in_front.x]
             tile = object if object isnt 0
             already_present = false
             for slot in @inventory

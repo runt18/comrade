@@ -8,6 +8,7 @@ require.config({
         'player': 'player',
         'creature': 'creature',
         'game': 'game',
+        'scene': 'scene',
 
         'plugins': 'plugins',
         'keymaster': 'vendor/keymaster',
