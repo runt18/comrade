@@ -2,7 +2,7 @@
 (function() {
 
   require(['jquery', 'game', 'scene', 'player', 'creature'], function($, g, s, player, Creature) {
-    var animate, change_keys, draw_block, draw_inventory, draw_object, keys_down, load_textures, render, tick;
+    var animate, change_keys, draw_block, draw_inventory, draw_object, keys_down, load_music, load_textures, music, render, tick;
     draw_block = function(dx, dy, type) {
       var sx, sy;
       sy = 1;
@@ -55,6 +55,16 @@
         })();
         return animate();
       };
+    };
+    music = null;
+    load_music = function() {
+      music = new Audio('audio/main.ogg');
+      music.addEventListener('ended', function() {
+        this.currentTime = 0;
+        return this.play();
+      }, false);
+      music.muted = false;
+      return music.play();
     };
     draw_inventory = function() {
       var slot, sx, sy, ts, x, _i, _len, _ref;
@@ -166,17 +176,27 @@
         event.preventDefault();
         switch (code) {
           case 87:
-            return keys_down.w = is_down;
+            keys_down.w = is_down;
+            break;
           case 65:
-            return keys_down.a = is_down;
+            keys_down.a = is_down;
+            break;
           case 83:
-            return keys_down.s = is_down;
+            keys_down.s = is_down;
+            break;
           case 68:
-            return keys_down.d = is_down;
+            keys_down.d = is_down;
+            break;
           case 75:
-            return keys_down.k = is_down;
+            keys_down.k = is_down;
+            break;
           case 76:
-            return keys_down.l = is_down;
+            keys_down.l = is_down;
+        }
+      }
+      if (is_down) {
+        if (code === 77) {
+          return music.muted = !music.muted;
         }
       }
     };
@@ -191,7 +211,8 @@
       g.ctx = canvas.getContext('2d');
       $body.keydown(change_keys);
       $body.keyup(change_keys);
-      return load_textures();
+      load_textures();
+      return load_music();
     });
   });
 

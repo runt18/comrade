@@ -32,6 +32,17 @@ require(['jquery', 'game', 'scene', 'player', 'creature'], ($, g, s, player, Cre
 
             animate()
 
+    music = null
+    load_music = ->
+        music = new Audio 'audio/main.ogg'
+        # there's a loop property but its not supported everywhere so an event listener is better for now
+        music.addEventListener 'ended', ->
+            this.currentTime = 0
+            this.play()
+        , false
+        music.muted = false
+        music.play()
+
     draw_inventory = ->
         g.ctx.fillStyle = 'grey'
         g.ctx.fillRect 0, g.screen_height - g.ui_height, g.screen_width, g.screen_height
@@ -116,6 +127,10 @@ require(['jquery', 'game', 'scene', 'player', 'creature'], ($, g, s, player, Cre
                 when 75 then keys_down.k = is_down
                 when 76 then keys_down.l = is_down
 
+        if is_down
+            if code is 77
+                music.muted = not music.muted
+
     $(document).ready ->
         $canvas = $ '<canvas>'
         $body = $ 'body'
@@ -130,4 +145,5 @@ require(['jquery', 'game', 'scene', 'player', 'creature'], ($, g, s, player, Cre
         $body.keyup change_keys
 
         load_textures()
+        load_music()
 )
