@@ -49,6 +49,13 @@ require(['jquery', 'game', 'scene', 'player', 'creature'], ($, g, s, player, Cre
                 g.draw_texture sx, sy, x, (g.screen_height - g.ui_height) / g.tile_size
                 g.ctx.fillText slot.count, x * ts + 30, g.screen_height - 10
 
+        g.draw_texture 4, 3, 29, 20
+        g.ctx.fillText player.coins, g.screen_width - 40, g.screen_height - 10
+
+        g.ctx.fillStyle = g.ctx.strokeStyle = 'red'
+        g.ctx.strokeRect g.screen_width - 200, g.screen_height - 25, 100, 20 
+        g.ctx.fillRect g.screen_width - 200, g.screen_height - 25, 100 * player.health / player.max_health, 20 
+    
     keys_down = 
         w: no
         a: no

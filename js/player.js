@@ -119,8 +119,10 @@
       };
 
       Player.prototype.set_stats = function() {
-        this.health = 10;
-        return this.attack = 2;
+        this.max_health = 10;
+        this.health = this.max_health - 5;
+        this.attack = 2;
+        return this.coins = 0;
       };
 
       Player.prototype.interact = function() {

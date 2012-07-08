@@ -57,13 +57,12 @@
       };
     };
     draw_inventory = function() {
-      var slot, sx, sy, ts, x, _i, _len, _ref, _results;
+      var slot, sx, sy, ts, x, _i, _len, _ref;
       g.ctx.fillStyle = 'grey';
       g.ctx.fillRect(0, g.screen_height - g.ui_height, g.screen_width, g.screen_height);
       g.ctx.fillStyle = 'white';
       ts = g.tile_size;
       _ref = player.inventory;
-      _results = [];
       for (x = _i = 0, _len = _ref.length; _i < _len; x = ++_i) {
         slot = _ref[x];
         sy = 3;
@@ -79,12 +78,14 @@
         }
         if (slot.count > 0) {
           g.draw_texture(sx, sy, x, (g.screen_height - g.ui_height) / g.tile_size);
-          _results.push(g.ctx.fillText(slot.count, x * ts + 30, g.screen_height - 10));
-        } else {
-          _results.push(void 0);
+          g.ctx.fillText(slot.count, x * ts + 30, g.screen_height - 10);
         }
       }
-      return _results;
+      g.draw_texture(4, 3, 29, 20);
+      g.ctx.fillText(player.coins, g.screen_width - 40, g.screen_height - 10);
+      g.ctx.fillStyle = g.ctx.strokeStyle = 'red';
+      g.ctx.strokeRect(g.screen_width - 200, g.screen_height - 25, 100, 20);
+      return g.ctx.fillRect(g.screen_width - 200, g.screen_height - 25, 100 * player.health / player.max_health, 20);
     };
     keys_down = {
       w: false,

@@ -36,8 +36,10 @@ define(['underscore', 'entity', 'game', 'scene'], (_, Entity, g, s)->
                 right: x: 4, y: 2
 
         set_stats: ->
-            @health = 10
+            @max_health = 10
+            @health = @max_health - 5
             @attack = 2
+            @coins = 0
 
         interact: ->
             for creature in creatures
