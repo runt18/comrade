@@ -1,4 +1,4 @@
-require(['jquery', 'game', 'scene', 'renderer', 'player', 'creature'], ($, g, s, r, player, Creature)->
+require(['jquery', 'game', 'scene', 'renderer', 'player', 'creature', 'stats'], ($, g, s, r, player, Creature, Stats)->
 
     load_textures = ->
         textures = new Image
@@ -39,6 +39,8 @@ require(['jquery', 'game', 'scene', 'renderer', 'player', 'creature'], ($, g, s,
     tick = 0
 
     render = (time)->
+        stats.begin()
+
         player.move 'y', -1 if keys_down.w
         player.move 'x', -1 if keys_down.a
         player.move 'y', 1 if keys_down.s
@@ -68,6 +70,8 @@ require(['jquery', 'game', 'scene', 'renderer', 'player', 'creature'], ($, g, s,
 
         tick += 1
 
+        stats.end()
+
     animate = (time)->
         requestAnimationFrame animate
         render time
@@ -91,6 +95,7 @@ require(['jquery', 'game', 'scene', 'renderer', 'player', 'creature'], ($, g, s,
             if code is 77
                 music.muted = not music.muted
 
+    stats = null
     $(document).ready ->
         r.init()
 
@@ -99,4 +104,8 @@ require(['jquery', 'game', 'scene', 'renderer', 'player', 'creature'], ($, g, s,
 
         load_textures()
         load_music()
+
+        stats = new Stats
+
+        $(stats.domElement).addClass('stats').appendTo($body)
 )

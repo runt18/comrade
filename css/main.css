@@ -488,6 +488,12 @@ h1{
     border: 1px solid black;
 }
 
+.stats{
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
 
 
 

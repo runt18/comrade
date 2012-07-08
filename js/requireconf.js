@@ -1,6 +1,6 @@
 require.config({
     baseUrl: 'js',
-    
+
     paths: {
         'jquery': 'vendor/jquery-1.7.2.min',
 
@@ -25,6 +25,10 @@ require.config({
 
         'underscore': {
             exports: '_'
+        },
+
+        'stats': {
+            exports: 'Stats'
         }
         // 'backbone': {
         //     deps: ['underscore', 'jquery'],
