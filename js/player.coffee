@@ -1,4 +1,4 @@
-define(['entity', 'game'], (Entity, g)->
+define(['underscore', 'entity', 'game'], (_, Entity, g)->
 
     class Item
         constructor: ->
@@ -46,13 +46,32 @@ define(['entity', 'game'], (Entity, g)->
                 if @in_front.x is creature.pos.x and @in_front.y is creature.pos.y
                     creature.health -= @attack
                     creature.remove() if creature.health <= 0
+                    return
 
             tile = g.world[@in_front.y][@in_front.x]
-            switch tile
-                when 2
-                    @inventory.push new Fish
-                when 3
-                    @inventory.push new Rock
+            object = g.objects[@in_front.y][@in_front.x]
+            tile = object if object isnt 0
+            already_present = false
+            for slot in @inventory
+                if slot.item.id is tile
+                    already_present = true
+                    slot.count += 1
+                    break
+
+            if not already_present
+                free_slots = false
+                for slot in @inventory
+                    if slot.count is 0
+                        slot.count = 1
+                        free_slots = true
+                        switch tile
+                            when 1 then slot.item = new Log
+                            when 2 then slot.item = new Fish
+                            when 3 then slot.item = new Rock
+                        break
+
+                if not free_slots
+                    log 'inventory full'
 
     new Player
 )

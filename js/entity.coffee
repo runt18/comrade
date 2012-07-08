@@ -1,4 +1,10 @@
 define(['game'], (g)->
+    class Slot
+        constructor: ->
+            @item = 
+                id: 0
+            @count = 0
+
     class Entity
         constructor: (@pos)->
             @create_images()
@@ -11,10 +17,10 @@ define(['game'], (g)->
             @direction = 1
             @set_in_front()
             @set_stats()
-            @inventory = []
+            @inventory = (new Slot for x in [1..10])
 
         set_position: ->
-            @pos = @pos or g.empty_tiles[Math.round Math.random() * g.empty_tiles.length]
+            @pos = @pos or g.scene_empty_tiles[Math.round Math.random() * g.scene_empty_tiles.length]
 
         set_image: ->
             switch @axis
@@ -68,11 +74,13 @@ define(['game'], (g)->
                 # Calculate the contents of the tile that it's trying to move to
                 if axis is 'x'
                     next_tile = g.scene[@pos.y][@pos.x + direction]
+                    next_object = g.objects[@pos.y][@pos.x + direction]
                 if axis is 'y'
                     next_tile = g.scene[@pos.y + direction][@pos.x] 
+                    next_object = g.objects[@pos.y + direction][@pos.x] 
                 
                 # Let it move if the tile isn't water or rock or something    
-                @frames_left = 10 unless next_tile in g.solid_tiles
+                @frames_left = 10 unless next_tile in g.solid_tiles or next_object in g.solid_objects
             catch TypeError
 
 )

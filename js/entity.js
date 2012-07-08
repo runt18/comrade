@@ -3,10 +3,23 @@
   var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   define(['game'], function(g) {
-    var Entity;
+    var Entity, Slot;
+    Slot = (function() {
+
+      function Slot() {
+        this.item = {
+          id: 0
+        };
+        this.count = 0;
+      }
+
+      return Slot;
+
+    })();
     return Entity = (function() {
 
       function Entity(pos) {
+        var x;
         this.pos = pos;
         this.create_images();
         this.image = this.images.down;
@@ -16,11 +29,18 @@
         this.direction = 1;
         this.set_in_front();
         this.set_stats();
-        this.inventory = [];
+        this.inventory = (function() {
+          var _i, _results;
+          _results = [];
+          for (x = _i = 1; _i <= 10; x = ++_i) {
+            _results.push(new Slot);
+          }
+          return _results;
+        })();
       }
 
       Entity.prototype.set_position = function() {
-        return this.pos = this.pos || g.empty_tiles[Math.round(Math.random() * g.empty_tiles.length)];
+        return this.pos = this.pos || g.scene_empty_tiles[Math.round(Math.random() * g.scene_empty_tiles.length)];
       };
 
       Entity.prototype.set_image = function() {
@@ -70,7 +90,7 @@
       };
 
       Entity.prototype.move = function(axis, direction) {
-        var next_tile;
+        var next_object, next_tile;
         if (this.frames_left > 0) {
           return;
         }
@@ -83,11 +103,13 @@
         try {
           if (axis === 'x') {
             next_tile = g.scene[this.pos.y][this.pos.x + direction];
+            next_object = g.objects[this.pos.y][this.pos.x + direction];
           }
           if (axis === 'y') {
             next_tile = g.scene[this.pos.y + direction][this.pos.x];
+            next_object = g.objects[this.pos.y + direction][this.pos.x];
           }
-          if (__indexOf.call(g.solid_tiles, next_tile) < 0) {
+          if (!(__indexOf.call(g.solid_tiles, next_tile) >= 0 || __indexOf.call(g.solid_objects, next_object) >= 0)) {
             return this.frames_left = 10;
           }
         } catch (TypeError) {

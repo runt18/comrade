@@ -2,14 +2,15 @@
 (function() {
   var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-  define(['perlin'], function(PerlinNoise) {
+  define(['underscore', 'perlin'], function(_, PerlinNoise) {
     var Game;
     Game = (function() {
 
       function Game() {
-        var scenes;
+        var scenes, x, y;
         this.num_creatures = 10;
         this.ui_height = 30;
+        this.num_trees = 100;
         scenes = 2;
         this.perlin_size = 5;
         this.width = 30;
@@ -28,14 +29,48 @@
         this.solid_tiles = [2, 3];
         this.scene = [];
         this.empty_tiles = [];
+        this.scene_empty_tiles = [];
+        this.objects = (function() {
+          var _i, _ref, _results;
+          _results = [];
+          for (y = _i = 1, _ref = this.world_height; 1 <= _ref ? _i <= _ref : _i >= _ref; y = 1 <= _ref ? ++_i : --_i) {
+            _results.push((function() {
+              var _j, _ref1, _results1;
+              _results1 = [];
+              for (x = _j = 1, _ref1 = this.world_width; 1 <= _ref1 ? _j <= _ref1 : _j >= _ref1; x = 1 <= _ref1 ? ++_j : --_j) {
+                _results1.push(0);
+              }
+              return _results1;
+            }).call(this));
+          }
+          return _results;
+        }).call(this);
+        this.solid_objects = [1];
         this.generate_world();
         this.load_scene();
+        this.add_trees();
       }
 
       Game.prototype.draw_texture = function(sx, sy, dx, dy) {
         var ts;
         ts = this.tile_size;
         return this.ctx.drawImage(texture_canvas, sx * ts, sy * ts, ts, ts, dx * ts, dy * ts, ts, ts);
+      };
+
+      Game.prototype.add_trees = function() {
+        var i, index, potential_trees, tree, trees, _i, _j, _len, _ref, _results;
+        potential_trees = _.clone(this.empty_tiles);
+        trees = [];
+        for (i = _i = 1, _ref = this.num_trees; 1 <= _ref ? _i <= _ref : _i >= _ref; i = 1 <= _ref ? ++_i : --_i) {
+          index = Math.floor(Math.random() * potential_trees.length);
+          trees.push(potential_trees.splice(index, 1)[0]);
+        }
+        _results = [];
+        for (_j = 0, _len = trees.length; _j < _len; _j++) {
+          tree = trees[_j];
+          _results.push(this.objects[tree.y][tree.x] = 1);
+        }
+        return _results;
       };
 
       Game.prototype.matrix_sub_area = function(matrix, x, y, width, height) {
@@ -50,7 +85,7 @@
       };
 
       Game.prototype.generate_world = function() {
-        var world, x, y, _i, _ref;
+        var cell, row, world, x, y, _i, _j, _len, _ref, _ref1, _results;
         world = (function() {
           var _i, _ref, _results;
           _results = [];
@@ -77,7 +112,29 @@
         for (x = _i = 0, _ref = this.world_height - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; x = 0 <= _ref ? ++_i : --_i) {
           world[x][this.world_width - 1] = world[x][0] = 3;
         }
-        return this.world = world;
+        this.world = world;
+        _ref1 = this.world;
+        _results = [];
+        for (y = _j = 0, _len = _ref1.length; _j < _len; y = ++_j) {
+          row = _ref1[y];
+          _results.push((function() {
+            var _k, _len1, _results1;
+            _results1 = [];
+            for (x = _k = 0, _len1 = row.length; _k < _len1; x = ++_k) {
+              cell = row[x];
+              if (__indexOf.call(this.solid_tiles, cell) < 0) {
+                _results1.push(this.empty_tiles.push({
+                  x: x,
+                  y: y
+                }));
+              } else {
+                _results1.push(void 0);
+              }
+            }
+            return _results1;
+          }).call(this));
+        }
+        return _results;
       };
 
       Game.prototype.block_type = function(height) {
@@ -96,6 +153,7 @@
       Game.prototype.load_scene = function() {
         var cell, row, x, y, _i, _len, _ref, _results;
         this.scene = this.matrix_sub_area(this.world, this.current_scene.x * this.width, this.current_scene.y * this.height, this.width, this.height);
+        this.scene_objects = this.matrix_sub_area(this.objects, this.current_scene.x * this.width, this.current_scene.y * this.height, this.width, this.height);
         _ref = this.scene;
         _results = [];
         for (y = _i = 0, _len = _ref.length; _i < _len; y = ++_i) {
@@ -106,7 +164,7 @@
             for (x = _j = 0, _len1 = row.length; _j < _len1; x = ++_j) {
               cell = row[x];
               if (__indexOf.call(this.solid_tiles, cell) < 0) {
-                _results1.push(this.empty_tiles.push({
+                _results1.push(this.scene_empty_tiles.push({
                   x: x,
                   y: y
                 }));

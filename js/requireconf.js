@@ -11,12 +11,17 @@ require.config({
 
         'plugins': 'plugins',
         'keymaster': 'vendor/keymaster',
+        'underscore': 'vendor/underscore',
         'perlin': 'vendor/perlin'
     },
 
     shim: {
         'keymaster': {
             exports: 'key'
+        },
+
+        'underscore': {
+            exports: '_'
         }
         // 'backbone': {
         //     deps: ['underscore', 'jquery'],

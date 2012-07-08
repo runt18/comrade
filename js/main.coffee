@@ -8,6 +8,13 @@ require(['jquery', 'game', 'player', 'creature'], ($, g, player, Creature)->
             when 2 then sx = 2
             when 3 then sx = 3
             when 4 then sx = 4
+            when 5 then sy = 5; sx = 1
+        g.draw_texture sx, sy, dx, dy
+
+    draw_object = (dx, dy, type)->
+        return if type is 0
+        sy = 5
+        sx = type
         g.draw_texture sx, sy, dx, dy
 
     load_textures = ->
@@ -29,18 +36,19 @@ require(['jquery', 'game', 'player', 'creature'], ($, g, player, Creature)->
     draw_inventory = ->
         g.ctx.fillStyle = 'grey'
         g.ctx.fillRect 0, g.screen_height - g.ui_height, g.screen_width, g.screen_height
-        g.ctx.fillStyle = 'blue'
+        g.ctx.fillStyle = 'white'
         ts = g.tile_size
-        for item, x in player.inventory
+        for slot, x in player.inventory
             sy = 3
-            switch item.id
+            switch slot.item.id
                 when 1 then sx = 1
                 when 2 then sx = 2
                 when 3 then sx = 3
             
             # g.ctx.fillRect x * ts, g.screen_height - g.ui_height, (x + 1) * ts, g.screen_height
-            g.draw_texture sx, sy, x, (g.screen_height - g.ui_height) / g.tile_size
-
+            if slot.count > 0
+                g.draw_texture sx, sy, x, (g.screen_height - g.ui_height) / g.tile_size
+                g.ctx.fillText slot.count, x * ts + 30, g.screen_height - 10
 
     keys_down = 
         w: no
@@ -67,7 +75,8 @@ require(['jquery', 'game', 'player', 'creature'], ($, g, player, Creature)->
 
         g.ctx.clearRect 0, 0, g.screen_width, g.screen_height
         draw_block x, y, tile for tile, x in row for row, y in g.scene
-        
+        draw_object x, y, object for object, x in row for row, y in g.scene_objects
+
         for creature in creatures
             if tick % 10 is 0
                 if Math.random() > 0.9

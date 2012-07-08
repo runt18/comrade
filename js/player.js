@@ -3,7 +3,7 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['entity', 'game'], function(Entity, g) {
+  define(['underscore', 'entity', 'game'], function(_, Entity, g) {
     var Fish, Item, Log, Player, Rock;
     Item = (function() {
 
@@ -124,7 +124,7 @@
       };
 
       Player.prototype.interact = function() {
-        var creature, tile, _i, _len;
+        var already_present, creature, free_slots, object, slot, tile, _i, _j, _k, _len, _len1, _len2, _ref, _ref1;
         for (_i = 0, _len = creatures.length; _i < _len; _i++) {
           creature = creatures[_i];
           if (this.in_front.x === creature.pos.x && this.in_front.y === creature.pos.y) {
@@ -132,14 +132,48 @@
             if (creature.health <= 0) {
               creature.remove();
             }
+            return;
           }
         }
         tile = g.world[this.in_front.y][this.in_front.x];
-        switch (tile) {
-          case 2:
-            return this.inventory.push(new Fish);
-          case 3:
-            return this.inventory.push(new Rock);
+        object = g.objects[this.in_front.y][this.in_front.x];
+        if (object !== 0) {
+          tile = object;
+        }
+        already_present = false;
+        _ref = this.inventory;
+        for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+          slot = _ref[_j];
+          if (slot.item.id === tile) {
+            already_present = true;
+            slot.count += 1;
+            break;
+          }
+        }
+        if (!already_present) {
+          free_slots = false;
+          _ref1 = this.inventory;
+          for (_k = 0, _len2 = _ref1.length; _k < _len2; _k++) {
+            slot = _ref1[_k];
+            if (slot.count === 0) {
+              slot.count = 1;
+              free_slots = true;
+              switch (tile) {
+                case 1:
+                  slot.item = new Log;
+                  break;
+                case 2:
+                  slot.item = new Fish;
+                  break;
+                case 3:
+                  slot.item = new Rock;
+              }
+              break;
+            }
+          }
+          if (!free_slots) {
+            return log('inventory full');
+          }
         }
       };
 

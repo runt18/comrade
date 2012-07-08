@@ -2,7 +2,7 @@
 (function() {
 
   require(['jquery', 'game', 'player', 'creature'], function($, g, player, Creature) {
-    var animate, change_keys, draw_block, draw_inventory, keys_down, load_textures, render, tick;
+    var animate, change_keys, draw_block, draw_inventory, draw_object, keys_down, load_textures, render, tick;
     draw_block = function(dx, dy, type) {
       var sx, sy;
       sy = 1;
@@ -18,7 +18,20 @@
           break;
         case 4:
           sx = 4;
+          break;
+        case 5:
+          sy = 5;
+          sx = 1;
       }
+      return g.draw_texture(sx, sy, dx, dy);
+    };
+    draw_object = function(dx, dy, type) {
+      var sx, sy;
+      if (type === 0) {
+        return;
+      }
+      sy = 5;
+      sx = type;
       return g.draw_texture(sx, sy, dx, dy);
     };
     load_textures = function() {
@@ -45,17 +58,17 @@
       };
     };
     draw_inventory = function() {
-      var item, sx, sy, ts, x, _i, _len, _ref, _results;
+      var slot, sx, sy, ts, x, _i, _len, _ref, _results;
       g.ctx.fillStyle = 'grey';
       g.ctx.fillRect(0, g.screen_height - g.ui_height, g.screen_width, g.screen_height);
-      g.ctx.fillStyle = 'blue';
+      g.ctx.fillStyle = 'white';
       ts = g.tile_size;
       _ref = player.inventory;
       _results = [];
       for (x = _i = 0, _len = _ref.length; _i < _len; x = ++_i) {
-        item = _ref[x];
+        slot = _ref[x];
         sy = 3;
-        switch (item.id) {
+        switch (slot.item.id) {
           case 1:
             sx = 1;
             break;
@@ -65,7 +78,12 @@
           case 3:
             sx = 3;
         }
-        _results.push(g.draw_texture(sx, sy, x, (g.screen_height - g.ui_height) / g.tile_size));
+        if (slot.count > 0) {
+          g.draw_texture(sx, sy, x, (g.screen_height - g.ui_height) / g.tile_size);
+          _results.push(g.ctx.fillText(slot.count, x * ts + 30, g.screen_height - 10));
+        } else {
+          _results.push(void 0);
+        }
       }
       return _results;
     };
@@ -79,7 +97,7 @@
     };
     tick = 0;
     render = function(time) {
-      var axis, creature, direction, row, tile, x, y, _i, _j, _k, _len, _len1, _len2, _ref;
+      var axis, creature, direction, object, row, tile, x, y, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref, _ref1;
       if (keys_down.w) {
         player.move('y', -1);
       }
@@ -112,8 +130,16 @@
           draw_block(x, y, tile);
         }
       }
-      for (_k = 0, _len2 = creatures.length; _k < _len2; _k++) {
-        creature = creatures[_k];
+      _ref1 = g.scene_objects;
+      for (y = _k = 0, _len2 = _ref1.length; _k < _len2; y = ++_k) {
+        row = _ref1[y];
+        for (x = _l = 0, _len3 = row.length; _l < _len3; x = ++_l) {
+          object = row[x];
+          draw_object(x, y, object);
+        }
+      }
+      for (_m = 0, _len4 = creatures.length; _m < _len4; _m++) {
+        creature = creatures[_m];
         if (tick % 10 === 0) {
           if (Math.random() > 0.9) {
             axis = Math.random() > 0.5 ? 'x' : 'y';
