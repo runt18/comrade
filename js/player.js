@@ -131,7 +131,7 @@
         if (s.current.wizard) {
           wizard = s.current.wizard;
           if (this.in_front.x === wizard.pos.x && this.in_front.y === wizard.pos.y) {
-            log(wizard);
+            wizard.say();
             return;
           }
         }

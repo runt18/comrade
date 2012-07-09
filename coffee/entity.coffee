@@ -24,7 +24,7 @@ define(['game', 'scene', 'renderer'], (g, s, r)->
                 scene = s.scenes[@scene_pos.x][@scene_pos.y]
             else
                 scene = s.current
-            @pos = @pos or scene.empty_tiles[Math.round Math.random() * scene.empty_tiles.length]
+            @pos = @pos or scene.empty_tiles[Math.floor Math.random() * scene.empty_tiles.length]
 
         set_image: ->
             switch @axis

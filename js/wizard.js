@@ -36,15 +36,28 @@
         };
       };
 
-      Wizard.prototype.set_stats = function() {};
+      Wizard.prototype.set_stats = function() {
+        this.name = 'Wizard';
+        this.phrases = ['Hello', 'Welcome to Comrade', 'If you want to earn some money, try gathering some resources', "I'll buy logs, fish and rocks", 'You can use this money to buy better tools', 'You can also buy weapons and armour to fight the spiders', "Here's a Basic Pickaxe to get you started. Try mining some rocks."];
+        return this.phrase_index = 0;
+      };
+
+      Wizard.prototype.say = function() {
+        var $dialogue, phrase;
+        $dialogue = $('#dialogue');
+        phrase = this.phrases[this.phrase_index];
+        $dialogue.append($('<p>').text("" + this.name + ": " + phrase));
+        $dialogue.scrollTop($dialogue[0].scrollHeight);
+        this.phrase_index += 1;
+        if (this.phrase_index === this.phrases.length) {
+          return this.phrase_index = 0;
+        }
+      };
 
       return Wizard;
 
     })(Entity);
-    return new Wizard({
-      x: 10,
-      y: 10
-    });
+    return new Wizard;
   });
 
 }).call(this);

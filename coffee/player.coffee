@@ -45,7 +45,7 @@ define(['underscore', 'entity', 'game', 'scene'], (_, Entity, g, s)->
                 wizard = s.current.wizard
 
                 if @in_front.x is wizard.pos.x and @in_front.y is wizard.pos.y
-                    log wizard
+                    wizard.say()
                     return
 
             for creature in s.current.creatures

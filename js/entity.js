@@ -47,7 +47,7 @@
         } else {
           scene = s.current;
         }
-        return this.pos = this.pos || scene.empty_tiles[Math.round(Math.random() * scene.empty_tiles.length)];
+        return this.pos = this.pos || scene.empty_tiles[Math.floor(Math.random() * scene.empty_tiles.length)];
       };
 
       Entity.prototype.set_image = function() {
