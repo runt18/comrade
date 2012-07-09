@@ -25,13 +25,13 @@ define(['underscore', 'perlin'], (_, PerlinNoise)->
             # values for controlling the output of the Perlin noise function
             @perlin_size = 5
             @perlin_z_axis = .8
-            
+
             # TODO: Fix circular dependency and stop storing the array of creatures in a global variable
             # @creatures = []
 
             # IDs of tiles and objects that entities cannot walk through
-            @solid_tiles = [2, 3]
-            @solid_objects = [1]
+            @solid_things = [2, 3, 5]
+            @resource_ids = [2, 3, 5]
 
             # array of coordinate pairs specifying tiles not occupied by solid tiles or objects
             @empty_tiles = []
@@ -52,14 +52,14 @@ define(['underscore', 'perlin'], (_, PerlinNoise)->
                 trees.push(potential_trees.splice(index, 1)[0])
 
             for tree in trees
-                @objects[tree.y][tree.x] = 1
+                @objects[tree.y][tree.x] = 5
 
         generate_world: ->
             for y in [1..@world_height - 2]
                 for x in [1..@world_width - 2]
                     tile = @block_type PerlinNoise @perlin_size * x / @world_width, @perlin_size * y / @world_height, @perlin_z_axis
                     @world[y][x] = tile
-                    @empty_tiles.push(x: x, y: y) unless tile in @solid_tiles
+                    @empty_tiles.push(x: x, y: y) unless tile in @solid_things
 
         block_type: (height)->
             return 2 if height <= .3

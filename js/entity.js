@@ -58,16 +58,19 @@
       Entity.prototype.set_in_front = function() {
         switch (this.axis) {
           case 'x':
-            return this.in_front = {
-              x: this.pos.x + this.direction * 2,
+            this.in_front = {
+              x: this.pos.x + this.direction,
               y: this.pos.y
             };
+            break;
           case 'y':
-            return this.in_front = {
+            this.in_front = {
               x: this.pos.x,
-              y: this.pos.y + this.direction * 2
+              y: this.pos.y + this.direction
             };
         }
+        this.next_tile = s.current.tiles[this.in_front.y][this.in_front.x];
+        return this.next_object = s.current.objects[this.in_front.y][this.in_front.x];
       };
 
       Entity.prototype.snap_to_grid = function() {
@@ -90,7 +93,7 @@
       };
 
       Entity.prototype.move = function(axis, direction) {
-        var next_object, next_tile;
+        var _ref, _ref1;
         if (this.frames_left > 0) {
           return;
         }
@@ -100,20 +103,8 @@
         this.set_image();
         this.move_scene();
         this.set_in_front();
-        try {
-          if (axis === 'x') {
-            next_tile = s.current.tiles[this.pos.y][this.pos.x + direction];
-            next_object = s.current.objects[this.pos.y][this.pos.x + direction];
-          }
-          if (axis === 'y') {
-            next_tile = s.current.tiles[this.pos.y + direction][this.pos.x];
-            next_object = s.current.objects[this.pos.y + direction][this.pos.x];
-          }
-          if (!(__indexOf.call(g.solid_tiles, next_tile) >= 0 || __indexOf.call(g.solid_objects, next_object) >= 0)) {
-            return this.frames_left = 10;
-          }
-        } catch (TypeError) {
-
+        if (!((_ref = this.next_tile, __indexOf.call(g.solid_things, _ref) >= 0) || (_ref1 = this.next_object, __indexOf.call(g.solid_things, _ref1) >= 0))) {
+          return this.frames_left = 10;
         }
       };
 

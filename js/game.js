@@ -20,8 +20,8 @@
         this.num_trees = 100;
         this.perlin_size = 5;
         this.perlin_z_axis = .8;
-        this.solid_tiles = [2, 3];
-        this.solid_objects = [1];
+        this.solid_things = [2, 3, 5];
+        this.resource_ids = [2, 3, 5];
         this.empty_tiles = [];
         this.objects = (function() {
           var _i, _ref, _results;
@@ -68,7 +68,7 @@
         _results = [];
         for (_j = 0, _len = trees.length; _j < _len; _j++) {
           tree = trees[_j];
-          _results.push(this.objects[tree.y][tree.x] = 1);
+          _results.push(this.objects[tree.y][tree.x] = 5);
         }
         return _results;
       };
@@ -83,7 +83,7 @@
             for (x = _j = 1, _ref1 = this.world_width - 2; 1 <= _ref1 ? _j <= _ref1 : _j >= _ref1; x = 1 <= _ref1 ? ++_j : --_j) {
               tile = this.block_type(PerlinNoise(this.perlin_size * x / this.world_width, this.perlin_size * y / this.world_height, this.perlin_z_axis));
               this.world[y][x] = tile;
-              if (__indexOf.call(this.solid_tiles, tile) < 0) {
+              if (__indexOf.call(this.solid_things, tile) < 0) {
                 _results1.push(this.empty_tiles.push({
                   x: x,
                   y: y

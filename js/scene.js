@@ -17,11 +17,11 @@
 
       Scene.prototype.matrix_sub_area = function(matrix, x, y, width, height) {
         var row, _i, _len, _ref, _results;
-        _ref = matrix.slice(y, (y + height) + 1 || 9e9);
+        _ref = matrix.slice(y, (y + height - 1) + 1 || 9e9);
         _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           row = _ref[_i];
-          _results.push(row.slice(x, (x + width) + 1 || 9e9));
+          _results.push(row.slice(x, (x + width - 1) + 1 || 9e9));
         }
         return _results;
       };
@@ -39,7 +39,7 @@
             _results1 = [];
             for (x = _j = 0, _len1 = row.length; _j < _len1; x = ++_j) {
               cell = row[x];
-              if (__indexOf.call(g.solid_tiles, cell) < 0) {
+              if (__indexOf.call(g.solid_things, cell) < 0) {
                 _results1.push(this.empty_tiles.push({
                   x: x,
                   y: y

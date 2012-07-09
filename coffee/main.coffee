@@ -46,7 +46,7 @@ require(['jquery', 'game', 'scene', 'renderer', 'player', 'creature', 'stats'], 
         player.move 'y', 1 if keys_down.s
         player.move 'x', 1 if keys_down.d
 
-        if tick % 200 is 0
+        if tick % 20 is 0
             if keys_down.l
                 creatures.push new Creature x: player.in_front.x, y: player.in_front.y
             if keys_down.k

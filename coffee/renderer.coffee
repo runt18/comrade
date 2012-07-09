@@ -30,7 +30,8 @@ define(['jquery', 'game'], ($, g)->
         draw_object: (dx, dy, type)->
             return if type is 0
             sy = 5
-            sx = type
+            switch type
+                when 5 then sx = 1
             @draw_texture sx, sy, dx, dy
 
         draw_health_bar: (value, max)->
@@ -42,29 +43,31 @@ define(['jquery', 'game'], ($, g)->
         draw_coins: (num)->
             @draw_texture 4, 3, 29, 20
             @ctx.fillText num, g.screen_width - 40, g.screen_height - 10
-            
+
 
         draw_inventory: (player)->
+            # draw the main bar
             @ctx.fillStyle = 'grey'
             @ctx.fillRect 0, g.screen_height - g.ui_height, g.screen_width, g.screen_height
+
+            # draw each item
             @ctx.fillStyle = 'white'
-            
             ts = g.tile_size
             for slot, x in player.inventory
                 sy = 3
                 switch slot.item.id
-                    when 1 then sx = 1
+                    when 5 then sx = 1
                     when 2 then sx = 2
                     when 3 then sx = 3
-                
+
                 # @ctx.fillRect x * ts, g.screen_height - g.ui_height, (x + 1) * ts, g.screen_height
                 if slot.count > 0
-                    @draw_texture sx, sy, x, (g.screen_height - g.ui_height) / g.tile_size
-                    @ctx.fillText slot.count, x * ts + 30, g.screen_height - 10
+                    @draw_texture sx, sy, x * 1.5, (g.screen_height - g.ui_height) / g.tile_size
+                    @ctx.fillText slot.count, x * ts * 1.5 + ts, g.screen_height - 10
 
             @draw_coins(player.coins)
             @draw_health_bar player.health, player.max_health
-            
+
 
     new Renderer
 )

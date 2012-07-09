@@ -59,7 +59,7 @@
       if (keys_down.d) {
         player.move('x', 1);
       }
-      if (tick % 200 === 0) {
+      if (tick % 20 === 0) {
         if (keys_down.l) {
           creatures.push(new Creature({
             x: player.in_front.x,

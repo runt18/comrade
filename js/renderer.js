@@ -53,7 +53,10 @@
           return;
         }
         sy = 5;
-        sx = type;
+        switch (type) {
+          case 5:
+            sx = 1;
+        }
         return this.draw_texture(sx, sy, dx, dy);
       };
 
@@ -81,7 +84,7 @@
           slot = _ref[x];
           sy = 3;
           switch (slot.item.id) {
-            case 1:
+            case 5:
               sx = 1;
               break;
             case 2:
@@ -91,8 +94,8 @@
               sx = 3;
           }
           if (slot.count > 0) {
-            this.draw_texture(sx, sy, x, (g.screen_height - g.ui_height) / g.tile_size);
-            this.ctx.fillText(slot.count, x * ts + 30, g.screen_height - 10);
+            this.draw_texture(sx, sy, x * 1.5, (g.screen_height - g.ui_height) / g.tile_size);
+            this.ctx.fillText(slot.count, x * ts * 1.5 + ts, g.screen_height - 10);
           }
         }
         this.draw_coins(player.coins);

@@ -5,7 +5,7 @@ define(['underscore', 'entity', 'game', 'scene'], (_, Entity, g, s)->
             @set_id()
 
     class Log extends Item
-        set_id: -> @id = 1
+        set_id: -> @id = 5
 
     class Fish extends Item
         set_id: -> @id = 2
@@ -48,9 +48,19 @@ define(['underscore', 'entity', 'game', 'scene'], (_, Entity, g, s)->
                     creature.remove() if creature.health <= 0
                     return
 
-            tile = g.world[@in_front.y][@in_front.x]
-            object = s.current.objects[@in_front.y][@in_front.x]
-            tile = object if object isnt 0
+            # if there's no creature in front to attack, see if there's a resource to gather
+
+            # get the tile an object at the square in front of the player
+            tile = @next_tile
+            object = @next_object
+
+            # override the tile if the object is a resource
+            tile = object if object in g.resource_ids
+
+            # don't do anything if the tile isn't a resource, eg grass
+            return unless tile in g.resource_ids
+
+            # if the item is already in the players inventory, increase its count by 1
             already_present = false
             for slot in @inventory
                 if slot.item.id is tile
@@ -58,6 +68,7 @@ define(['underscore', 'entity', 'game', 'scene'], (_, Entity, g, s)->
                     slot.count += 1
                     break
 
+            # if it's not, find the first free slot and add it there
             if not already_present
                 free_slots = false
                 for slot in @inventory
@@ -65,11 +76,12 @@ define(['underscore', 'entity', 'game', 'scene'], (_, Entity, g, s)->
                         slot.count = 1
                         free_slots = true
                         switch tile
-                            when 1 then slot.item = new Log
+                            when 5 then slot.item = new Log
                             when 2 then slot.item = new Fish
                             when 3 then slot.item = new Rock
                         break
 
+                # there are no free slots
                 if not free_slots
                     log 'inventory full'
 
