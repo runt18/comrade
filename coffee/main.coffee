@@ -1,4 +1,9 @@
-require(['jquery', 'game', 'scene', 'renderer', 'player', 'creature', 'wizard', 'stats'], ($, g, s, r, player, Creature, wizard, Stats)->
+require(
+    ['jquery', 'game', 'scene', 'renderer',
+    'player', 'creature', 'wizard', 'lumberjack',
+    'stats'],
+($, g, s, r, player, Creature, wizard, Lumberjack, Stats)->
+
 
     load_textures = ->
         textures = new Image
@@ -61,8 +66,9 @@ require(['jquery', 'game', 'scene', 'renderer', 'player', 'creature', 'wizard', 
                     creature.move(axis, direction)
             creature.animate()
 
-        if s.current.wizard
-            s.current.wizard.animate()
+        if s.current.npcs
+            for npc in s.current.npcs
+                npc.animate()
 
         player.animate()
 
@@ -100,7 +106,7 @@ require(['jquery', 'game', 'scene', 'renderer', 'player', 'creature', 'wizard', 
         r.init()
 
         s.add_creatures(Creature)
-        s.current.wizard = wizard
+        s.current.npcs = [wizard, new Lumberjack]
 
         $body.keydown change_keys
         $body.keyup change_keys

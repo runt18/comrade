@@ -1,4 +1,4 @@
-define(['underscore', 'perlin'], (_, PerlinNoise)->
+define(['perlin'], (PerlinNoise)->
     class Game
         constructor: ->
             # height of the UI below the main game area in pixels
@@ -40,13 +40,9 @@ define(['underscore', 'perlin'], (_, PerlinNoise)->
             @add_trees()
 
         add_trees: ->
-            potential_trees = _.clone(@empty_tiles)
-            trees = []
             for i in [1..@num_trees]
-                index = Math.floor Math.random() * potential_trees.length
-                trees.push(potential_trees.splice(index, 1)[0])
-
-            for tree in trees
+                index = Math.floor Math.random() * @empty_tiles.length
+                tree = @empty_tiles.splice(index, 1)[0]
                 @objects[tree.y][tree.x] = 5
 
         generate_world: ->

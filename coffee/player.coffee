@@ -40,28 +40,16 @@ define(['underscore', 'entity', 'game', 'scene'], (_, Entity, g, s)->
             @attack = 2
             @coins = 0
 
-        interact: ->
-            if s.current.wizard
-                wizard = s.current.wizard
-
-                if @in_front.x is wizard.pos.x and @in_front.y is wizard.pos.y
-                    wizard.say()
-                    return
-
+        attack_creature: ->
             for creature in s.current.creatures
                 if @in_front.x is creature.pos.x and @in_front.y is creature.pos.y
                     creature.health -= @attack
                     creature.remove() if creature.health <= 0
-                    return
+                    return true
 
-            # if there's no creature in front to attack, see if there's a resource to gather
-
-            # get the tile an object at the square in front of the player
-            tile = @next_tile
-            object = @next_object
-
+        gather_resource: ->
             # override the tile if the object is a resource
-            tile = object if object in g.resource_ids
+            tile = if @next_object in g.resource_ids then @next_object else @next_tile
 
             # don't do anything if the tile isn't a resource, eg grass
             return unless tile in g.resource_ids
@@ -90,6 +78,20 @@ define(['underscore', 'entity', 'game', 'scene'], (_, Entity, g, s)->
                 # there are no free slots
                 if not free_slots
                     log 'inventory full'
+
+        interact: ->
+            if s.current.npcs
+                for npc in s.current.npcs
+                    if @in_front.x is npc.pos.x and @in_front.y is npc.pos.y
+                        npc.say()
+                        return
+
+            return if @attack_creature()
+
+            # if there's no creature in front to attack, see if there's a resource to gather
+
+            @gather_resource()
+
 
     new Player
 )

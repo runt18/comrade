@@ -3,7 +3,7 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['entity'], function(Entity) {
+  define(['npc'], function(NPC) {
     var Wizard;
     Wizard = (function(_super) {
 
@@ -18,19 +18,19 @@
       Wizard.prototype.create_images = function() {
         return this.images = {
           up: {
-            x: 1,
+            x: 5,
             y: 2
           },
           left: {
-            x: 3,
+            x: 7,
             y: 2
           },
           down: {
-            x: 2,
+            x: 6,
             y: 2
           },
           right: {
-            x: 4,
+            x: 8,
             y: 2
           }
         };
@@ -42,21 +42,9 @@
         return this.phrase_index = 0;
       };
 
-      Wizard.prototype.say = function() {
-        var $dialogue, phrase;
-        $dialogue = $('#dialogue');
-        phrase = this.phrases[this.phrase_index];
-        $dialogue.append($('<p>').text("" + this.name + ": " + phrase));
-        $dialogue.scrollTop($dialogue[0].scrollHeight);
-        this.phrase_index += 1;
-        if (this.phrase_index === this.phrases.length) {
-          return this.phrase_index = 0;
-        }
-      };
-
       return Wizard;
 
-    })(Entity);
+    })(NPC);
     return new Wizard;
   });
 

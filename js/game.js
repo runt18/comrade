@@ -2,7 +2,7 @@
 (function() {
   var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-  define(['underscore', 'perlin'], function(_, PerlinNoise) {
+  define(['perlin'], function(PerlinNoise) {
     var Game;
     Game = (function() {
 
@@ -57,16 +57,11 @@
       }
 
       Game.prototype.add_trees = function() {
-        var i, index, potential_trees, tree, trees, _i, _j, _len, _ref, _results;
-        potential_trees = _.clone(this.empty_tiles);
-        trees = [];
-        for (i = _i = 1, _ref = this.num_trees; 1 <= _ref ? _i <= _ref : _i >= _ref; i = 1 <= _ref ? ++_i : --_i) {
-          index = Math.floor(Math.random() * potential_trees.length);
-          trees.push(potential_trees.splice(index, 1)[0]);
-        }
+        var i, index, tree, _i, _ref, _results;
         _results = [];
-        for (_j = 0, _len = trees.length; _j < _len; _j++) {
-          tree = trees[_j];
+        for (i = _i = 1, _ref = this.num_trees; 1 <= _ref ? _i <= _ref : _i >= _ref; i = 1 <= _ref ? ++_i : --_i) {
+          index = Math.floor(Math.random() * this.empty_tiles.length);
+          tree = this.empty_tiles.splice(index, 1)[0];
           _results.push(this.objects[tree.y][tree.x] = 5);
         }
         return _results;

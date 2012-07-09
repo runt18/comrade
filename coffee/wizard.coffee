@@ -1,13 +1,13 @@
-define(['entity'], (Entity)->
-	class Wizard extends Entity
+define(['npc'], (NPC)->
+	class Wizard extends NPC
 		move_scene: ->
 
 		create_images: ->
             @images =
-                up: x: 1, y: 2
-                left: x: 3, y: 2
-                down: x: 2, y: 2
-                right: x: 4, y: 2
+                up: x: 5, y: 2
+                left: x: 7, y: 2
+                down: x: 6, y: 2
+                right: x: 8, y: 2
 
         set_stats: ->
         	@name = 'Wizard'
@@ -21,14 +21,6 @@ define(['entity'], (Entity)->
         		"Here's a Basic Pickaxe to get you started. Try mining some rocks."
         	]
         	@phrase_index = 0
-
-        say: ->
-        	$dialogue = $ '#dialogue'
-        	phrase = @phrases[@phrase_index]
-        	$dialogue.append $('<p>').text "#{@name}: #{phrase}"
-        	$dialogue.scrollTop $dialogue[0].scrollHeight
-        	@phrase_index += 1
-        	@phrase_index = 0 if @phrase_index is @phrases.length
 
 	new Wizard
 )

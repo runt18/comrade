@@ -5,8 +5,12 @@ require.config({
         'jquery': 'vendor/jquery-1.7.2.min',
 
         'entity': 'entity',
+        'npc': 'npc',
+
         'player': 'player',
         'creature': 'creature',
+        'lumberjack': 'lumberjack',
+
         'game': 'game',
         'scene': 'scene',
         'renderer': 'renderer',

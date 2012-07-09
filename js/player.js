@@ -126,15 +126,8 @@
         return this.coins = 0;
       };
 
-      Player.prototype.interact = function() {
-        var already_present, creature, free_slots, object, slot, tile, wizard, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2;
-        if (s.current.wizard) {
-          wizard = s.current.wizard;
-          if (this.in_front.x === wizard.pos.x && this.in_front.y === wizard.pos.y) {
-            wizard.say();
-            return;
-          }
-        }
+      Player.prototype.attack_creature = function() {
+        var creature, _i, _len, _ref;
         _ref = s.current.creatures;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           creature = _ref[_i];
@@ -143,21 +136,21 @@
             if (creature.health <= 0) {
               creature.remove();
             }
-            return;
+            return true;
           }
         }
-        tile = this.next_tile;
-        object = this.next_object;
-        if (__indexOf.call(g.resource_ids, object) >= 0) {
-          tile = object;
-        }
+      };
+
+      Player.prototype.gather_resource = function() {
+        var already_present, free_slots, slot, tile, _i, _j, _len, _len1, _ref, _ref1, _ref2;
+        tile = (_ref = this.next_object, __indexOf.call(g.resource_ids, _ref) >= 0) ? this.next_object : this.next_tile;
         if (__indexOf.call(g.resource_ids, tile) < 0) {
           return;
         }
         already_present = false;
         _ref1 = this.inventory;
-        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-          slot = _ref1[_j];
+        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+          slot = _ref1[_i];
           if (slot.item.id === tile) {
             already_present = true;
             slot.count += 1;
@@ -167,8 +160,8 @@
         if (!already_present) {
           free_slots = false;
           _ref2 = this.inventory;
-          for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
-            slot = _ref2[_k];
+          for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
+            slot = _ref2[_j];
             if (slot.count === 0) {
               slot.count = 1;
               free_slots = true;
@@ -189,6 +182,24 @@
             return log('inventory full');
           }
         }
+      };
+
+      Player.prototype.interact = function() {
+        var npc, _i, _len, _ref;
+        if (s.current.npcs) {
+          _ref = s.current.npcs;
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            npc = _ref[_i];
+            if (this.in_front.x === npc.pos.x && this.in_front.y === npc.pos.y) {
+              npc.say();
+              return;
+            }
+          }
+        }
+        if (this.attack_creature()) {
+          return;
+        }
+        return this.gather_resource();
       };
 
       return Player;
