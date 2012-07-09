@@ -6,7 +6,7 @@ define(['game', 'scene', 'renderer'], (g, s, r)->
             @count = 0
 
     class Entity
-        constructor: (@pos)->
+        constructor: (@pos, @scene_pos)->
             @create_images()
 
             @image = @images.down
@@ -20,7 +20,11 @@ define(['game', 'scene', 'renderer'], (g, s, r)->
             @inventory = (new Slot for x in [1..10])
 
         set_position: ->
-            @pos = @pos or s.current.empty_tiles[Math.round Math.random() * s.current.empty_tiles.length]
+            if @scene_pos
+                scene = s.scenes[@scene_pos.x][@scene_pos.y]
+            else
+                scene = s.current
+            @pos = @pos or scene.empty_tiles[Math.round Math.random() * scene.empty_tiles.length]
 
         set_image: ->
             switch @axis

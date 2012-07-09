@@ -11,9 +11,6 @@ require(['jquery', 'game', 'scene', 'renderer', 'player', 'creature', 'stats'], 
             texture_canvas.width = textures.width
             texture_context.drawImage textures, 0, 0
 
-            # s.load()
-            window.creatures = (new Creature for x in [1..g.num_creatures])
-
             animate()
 
     music = null
@@ -48,7 +45,7 @@ require(['jquery', 'game', 'scene', 'renderer', 'player', 'creature', 'stats'], 
 
         if tick % 20 is 0
             if keys_down.l
-                creatures.push new Creature x: player.in_front.x, y: player.in_front.y
+                s.current.creatures.push new Creature x: player.in_front.x, y: player.in_front.y
             if keys_down.k
                 player.interact()
 
@@ -56,7 +53,7 @@ require(['jquery', 'game', 'scene', 'renderer', 'player', 'creature', 'stats'], 
         r.draw_block x, y, tile for tile, x in row for row, y in s.current.tiles
         r.draw_object x, y, object for object, x in row for row, y in s.current.objects
 
-        for creature in creatures
+        for creature in s.current.creatures
             if tick % 10 is 0
                 if Math.random() > 0.9
                     axis = if Math.random() > 0.5 then 'x' else 'y'
@@ -98,6 +95,8 @@ require(['jquery', 'game', 'scene', 'renderer', 'player', 'creature', 'stats'], 
     stats = null
     $(document).ready ->
         r.init()
+
+        s.add_creatures(Creature)
 
         $body.keydown change_keys
         $body.keyup change_keys

@@ -127,9 +127,10 @@
       };
 
       Player.prototype.interact = function() {
-        var already_present, creature, free_slots, object, slot, tile, _i, _j, _k, _len, _len1, _len2, _ref, _ref1;
-        for (_i = 0, _len = creatures.length; _i < _len; _i++) {
-          creature = creatures[_i];
+        var already_present, creature, free_slots, object, slot, tile, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2;
+        _ref = s.current.creatures;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          creature = _ref[_i];
           if (this.in_front.x === creature.pos.x && this.in_front.y === creature.pos.y) {
             creature.health -= this.attack;
             if (creature.health <= 0) {
@@ -147,9 +148,9 @@
           return;
         }
         already_present = false;
-        _ref = this.inventory;
-        for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
-          slot = _ref[_j];
+        _ref1 = this.inventory;
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          slot = _ref1[_j];
           if (slot.item.id === tile) {
             already_present = true;
             slot.count += 1;
@@ -158,9 +159,9 @@
         }
         if (!already_present) {
           free_slots = false;
-          _ref1 = this.inventory;
-          for (_k = 0, _len2 = _ref1.length; _k < _len2; _k++) {
-            slot = _ref1[_k];
+          _ref2 = this.inventory;
+          for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
+            slot = _ref2[_k];
             if (slot.count === 0) {
               slot.count = 1;
               free_slots = true;

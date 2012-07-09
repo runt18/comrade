@@ -6,6 +6,7 @@ define(['game'], (g)->
             @empty_tiles = []
             @objects = []
             @load()
+            @num_creatures = 10
 
         matrix_sub_area: (matrix, x, y, width, height)->
             (row[x..x + width - 1] for row in matrix[y..y + height - 1])
@@ -34,6 +35,12 @@ define(['game'], (g)->
 
         set: ->
             @current = @scenes[@pos.x][@pos.y]
+
+        add_creatures: (Creature)->
+            for row , x in @scenes
+                for scene, y in row
+                    scene.creatures = (new Creature(null, {x: x, y: y}) for i in [1..scene.num_creatures])
+
 
     new Scenes
 )

@@ -16,7 +16,6 @@
         this.screen_height = this.height * this.tile_size + this.ui_height;
         this.world_width = this.width * 2;
         this.world_height = this.height * 2;
-        this.num_creatures = 10;
         this.num_trees = 100;
         this.perlin_size = 5;
         this.perlin_z_axis = .8;

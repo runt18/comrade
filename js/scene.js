@@ -13,6 +13,7 @@
         this.empty_tiles = [];
         this.objects = [];
         this.load();
+        this.num_creatures = 10;
       }
 
       Scene.prototype.matrix_sub_area = function(matrix, x, y, width, height) {
@@ -78,6 +79,35 @@
 
       Scenes.prototype.set = function() {
         return this.current = this.scenes[this.pos.x][this.pos.y];
+      };
+
+      Scenes.prototype.add_creatures = function(Creature) {
+        var i, row, scene, x, y, _i, _len, _ref, _results;
+        _ref = this.scenes;
+        _results = [];
+        for (x = _i = 0, _len = _ref.length; _i < _len; x = ++_i) {
+          row = _ref[x];
+          _results.push((function() {
+            var _j, _len1, _results1;
+            _results1 = [];
+            for (y = _j = 0, _len1 = row.length; _j < _len1; y = ++_j) {
+              scene = row[y];
+              _results1.push(scene.creatures = (function() {
+                var _k, _ref1, _results2;
+                _results2 = [];
+                for (i = _k = 1, _ref1 = scene.num_creatures; 1 <= _ref1 ? _k <= _ref1 : _k >= _ref1; i = 1 <= _ref1 ? ++_k : --_k) {
+                  _results2.push(new Creature(null, {
+                    x: x,
+                    y: y
+                  }));
+                }
+                return _results2;
+              })());
+            }
+            return _results1;
+          })());
+        }
+        return _results;
       };
 
       return Scenes;

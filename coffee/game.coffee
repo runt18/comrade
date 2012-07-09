@@ -17,17 +17,12 @@ define(['underscore', 'perlin'], (_, PerlinNoise)->
             @world_width = @width * 2
             @world_height = @height * 2
 
-            # number of creatures in every scene
-            @num_creatures = 10
             # number of trees in the world
             @num_trees = 100
 
             # values for controlling the output of the Perlin noise function
             @perlin_size = 5
             @perlin_z_axis = .8
-
-            # TODO: Fix circular dependency and stop storing the array of creatures in a global variable
-            # @creatures = []
 
             # IDs of tiles and objects that entities cannot walk through
             @solid_things = [2, 3, 5]

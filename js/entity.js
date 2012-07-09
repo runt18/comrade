@@ -18,9 +18,10 @@
     })();
     return Entity = (function() {
 
-      function Entity(pos) {
+      function Entity(pos, scene_pos) {
         var x;
         this.pos = pos;
+        this.scene_pos = scene_pos;
         this.create_images();
         this.image = this.images.down;
         this.frames_left = 0;
@@ -40,7 +41,13 @@
       }
 
       Entity.prototype.set_position = function() {
-        return this.pos = this.pos || s.current.empty_tiles[Math.round(Math.random() * s.current.empty_tiles.length)];
+        var scene;
+        if (this.scene_pos) {
+          scene = s.scenes[this.scene_pos.x][this.scene_pos.y];
+        } else {
+          scene = s.current;
+        }
+        return this.pos = this.pos || scene.empty_tiles[Math.round(Math.random() * scene.empty_tiles.length)];
       };
 
       Entity.prototype.set_image = function() {

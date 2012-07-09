@@ -1,5 +1,4 @@
 define(['underscore', 'entity', 'game', 'scene'], (_, Entity, g, s)->
-
     class Item
         constructor: ->
             @set_id()
@@ -42,7 +41,7 @@ define(['underscore', 'entity', 'game', 'scene'], (_, Entity, g, s)->
             @coins = 0
 
         interact: ->
-            for creature in creatures
+            for creature in s.current.creatures
                 if @in_front.x is creature.pos.x and @in_front.y is creature.pos.y
                     creature.health -= @attack
                     creature.remove() if creature.health <= 0

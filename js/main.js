@@ -10,18 +10,9 @@
       window.texture_canvas = $('<canvas>')[0];
       texture_context = texture_canvas.getContext('2d');
       return textures.onload = function() {
-        var x;
         texture_canvas.height = textures.height;
         texture_canvas.width = textures.width;
         texture_context.drawImage(textures, 0, 0);
-        window.creatures = (function() {
-          var _i, _ref, _results;
-          _results = [];
-          for (x = _i = 1, _ref = g.num_creatures; 1 <= _ref ? _i <= _ref : _i >= _ref; x = 1 <= _ref ? ++_i : --_i) {
-            _results.push(new Creature);
-          }
-          return _results;
-        })();
         return animate();
       };
     };
@@ -45,7 +36,7 @@
     };
     tick = 0;
     render = function(time) {
-      var axis, creature, direction, object, row, tile, x, y, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref, _ref1;
+      var axis, creature, direction, object, row, tile, x, y, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref, _ref1, _ref2;
       stats.begin();
       if (keys_down.w) {
         player.move('y', -1);
@@ -61,7 +52,7 @@
       }
       if (tick % 20 === 0) {
         if (keys_down.l) {
-          creatures.push(new Creature({
+          s.current.creatures.push(new Creature({
             x: player.in_front.x,
             y: player.in_front.y
           }));
@@ -87,8 +78,9 @@
           r.draw_object(x, y, object);
         }
       }
-      for (_m = 0, _len4 = creatures.length; _m < _len4; _m++) {
-        creature = creatures[_m];
+      _ref2 = s.current.creatures;
+      for (_m = 0, _len4 = _ref2.length; _m < _len4; _m++) {
+        creature = _ref2[_m];
         if (tick % 10 === 0) {
           if (Math.random() > 0.9) {
             axis = Math.random() > 0.5 ? 'x' : 'y';
@@ -143,6 +135,7 @@
     stats = null;
     return $(document).ready(function() {
       r.init();
+      s.add_creatures(Creature);
       $body.keydown(change_keys);
       $body.keyup(change_keys);
       load_textures();
