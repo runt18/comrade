@@ -32,9 +32,9 @@ define(['underscore', 'perlin'], (_, PerlinNoise)->
             @empty_tiles = []
 
             # 2d array of IDs of objects (trees etc.)
-            @objects = (0 for x in [1..@world_width] for y in [1..@world_height])
+            @objects = (0 for x in [0..@world_width - 1] for y in [0..@world_height - 1])
             # 2d array of IDs of tiles (grass, water etc.)
-            @world = (3 for x in [1..@world_width] for y in [1..@world_height])
+            @world = (3 for x in [0..@world_width - 1] for y in [0..@world_height - 1])
 
             @generate_world()
             @add_trees()

@@ -5,15 +5,46 @@
 
   define(['entity'], function(Entity) {
     var Wizard;
-    return Wizard = (function(_super) {
+    Wizard = (function(_super) {
 
       __extends(Wizard, _super);
 
-      function Wizard() {}
+      function Wizard() {
+        return Wizard.__super__.constructor.apply(this, arguments);
+      }
+
+      Wizard.prototype.move_scene = function() {};
+
+      Wizard.prototype.create_images = function() {
+        return this.images = {
+          up: {
+            x: 1,
+            y: 2
+          },
+          left: {
+            x: 3,
+            y: 2
+          },
+          down: {
+            x: 2,
+            y: 2
+          },
+          right: {
+            x: 4,
+            y: 2
+          }
+        };
+      };
+
+      Wizard.prototype.set_stats = function() {};
 
       return Wizard;
 
     })(Entity);
+    return new Wizard({
+      x: 10,
+      y: 10
+    });
   });
 
 }).call(this);

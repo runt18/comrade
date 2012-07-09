@@ -76,8 +76,12 @@
               y: this.pos.y + this.direction
             };
         }
-        this.next_tile = s.current.tiles[this.in_front.y][this.in_front.x];
-        return this.next_object = s.current.objects[this.in_front.y][this.in_front.x];
+        try {
+          this.next_tile = s.current.tiles[this.in_front.y][this.in_front.x];
+          return this.next_object = s.current.objects[this.in_front.y][this.in_front.x];
+        } catch (TypeError) {
+
+        }
       };
 
       Entity.prototype.snap_to_grid = function() {
@@ -95,6 +99,7 @@
           this.frames_left -= 1;
         } else {
           this.snap_to_grid();
+          this.set_in_front();
         }
         return this.draw();
       };

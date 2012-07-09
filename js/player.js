@@ -127,7 +127,14 @@
       };
 
       Player.prototype.interact = function() {
-        var already_present, creature, free_slots, object, slot, tile, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2;
+        var already_present, creature, free_slots, object, slot, tile, wizard, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2;
+        if (s.current.wizard) {
+          wizard = s.current.wizard;
+          if (this.in_front.x === wizard.pos.x && this.in_front.y === wizard.pos.y) {
+            log(wizard);
+            return;
+          }
+        }
         _ref = s.current.creatures;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           creature = _ref[_i];

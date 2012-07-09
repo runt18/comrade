@@ -40,9 +40,11 @@ define(['game', 'scene', 'renderer'], (g, s, r)->
                 when 'x' then @in_front = x: @pos.x + @direction, y: @pos.y
                 when 'y' then @in_front = x: @pos.x, y: @pos.y + @direction
 
-            # Get the contents of the tile that it's trying to move to
-            @next_tile = s.current.tiles[@in_front.y][@in_front.x]
-            @next_object = s.current.objects[@in_front.y][@in_front.x]
+            try
+                # Get the contents of the tile that it's trying to move to
+                @next_tile = s.current.tiles[@in_front.y][@in_front.x]
+                @next_object = s.current.objects[@in_front.y][@in_front.x]
+            catch TypeError
 
         snap_to_grid: ->
             # Snap to nearest grid square when the animation has finished
@@ -58,6 +60,7 @@ define(['game', 'scene', 'renderer'], (g, s, r)->
                 @frames_left -= 1
             else
                 @snap_to_grid()
+                @set_in_front()
 
             @draw()
 

@@ -25,11 +25,11 @@
         this.objects = (function() {
           var _i, _ref, _results;
           _results = [];
-          for (y = _i = 1, _ref = this.world_height; 1 <= _ref ? _i <= _ref : _i >= _ref; y = 1 <= _ref ? ++_i : --_i) {
+          for (y = _i = 0, _ref = this.world_height - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; y = 0 <= _ref ? ++_i : --_i) {
             _results.push((function() {
               var _j, _ref1, _results1;
               _results1 = [];
-              for (x = _j = 1, _ref1 = this.world_width; 1 <= _ref1 ? _j <= _ref1 : _j >= _ref1; x = 1 <= _ref1 ? ++_j : --_j) {
+              for (x = _j = 0, _ref1 = this.world_width - 1; 0 <= _ref1 ? _j <= _ref1 : _j >= _ref1; x = 0 <= _ref1 ? ++_j : --_j) {
                 _results1.push(0);
               }
               return _results1;
@@ -40,11 +40,11 @@
         this.world = (function() {
           var _i, _ref, _results;
           _results = [];
-          for (y = _i = 1, _ref = this.world_height; 1 <= _ref ? _i <= _ref : _i >= _ref; y = 1 <= _ref ? ++_i : --_i) {
+          for (y = _i = 0, _ref = this.world_height - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; y = 0 <= _ref ? ++_i : --_i) {
             _results.push((function() {
               var _j, _ref1, _results1;
               _results1 = [];
-              for (x = _j = 1, _ref1 = this.world_width; 1 <= _ref1 ? _j <= _ref1 : _j >= _ref1; x = 1 <= _ref1 ? ++_j : --_j) {
+              for (x = _j = 0, _ref1 = this.world_width - 1; 0 <= _ref1 ? _j <= _ref1 : _j >= _ref1; x = 0 <= _ref1 ? ++_j : --_j) {
                 _results1.push(3);
               }
               return _results1;

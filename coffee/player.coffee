@@ -41,6 +41,13 @@ define(['underscore', 'entity', 'game', 'scene'], (_, Entity, g, s)->
             @coins = 0
 
         interact: ->
+            if s.current.wizard
+                wizard = s.current.wizard
+
+                if @in_front.x is wizard.pos.x and @in_front.y is wizard.pos.y
+                    log wizard
+                    return
+
             for creature in s.current.creatures
                 if @in_front.x is creature.pos.x and @in_front.y is creature.pos.y
                     creature.health -= @attack
