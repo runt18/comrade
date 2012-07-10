@@ -506,6 +506,16 @@ h1{
     margin: 0 0 3px 0;
 }
 
+#response{
+    width: 100%;
+    border: none;
+
+}
+
+#response:focus{
+    outline: none;
+}
+
 
 
 

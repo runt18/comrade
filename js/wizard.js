@@ -42,6 +42,8 @@
         return this.phrase_index = 0;
       };
 
+      Wizard.prototype.trade = function() {};
+
       return Wizard;
 
     })(NPC);

@@ -1,16 +1,22 @@
 define(['underscore', 'entity', 'game', 'scene'], (_, Entity, g, s)->
     class Item
         constructor: ->
-            @set_id()
+            @set_stats()
 
     class Log extends Item
-        set_id: -> @id = 5
+        set_stats: ->
+            @id = 5
+            @value = 3
 
     class Fish extends Item
-        set_id: -> @id = 2
+        set_stats: ->
+            @id = 2
+            @value = 3
 
     class Rock extends Item
-        set_id: -> @id = 3
+        set_stats: ->
+            @id = 3
+            @value = 3
 
     class Player extends Entity
         move_scene: ->
@@ -83,7 +89,7 @@ define(['underscore', 'entity', 'game', 'scene'], (_, Entity, g, s)->
             if s.current.npcs
                 for npc in s.current.npcs
                     if @in_front.x is npc.pos.x and @in_front.y is npc.pos.y
-                        npc.say()
+                        npc.interact()
                         return
 
             return if @attack_creature()

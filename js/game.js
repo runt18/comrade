@@ -19,6 +19,7 @@
         this.num_trees = 100;
         this.perlin_size = 5;
         this.perlin_z_axis = .8;
+        this.input = null;
         this.solid_things = [2, 3, 5];
         this.resource_ids = [2, 3, 5];
         this.empty_tiles = [];

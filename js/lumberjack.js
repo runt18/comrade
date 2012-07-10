@@ -3,7 +3,7 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['npc'], function(NPC) {
+  define(['underscore', 'npc', 'player'], function(_, NPC, player) {
     var Lumberjack;
     return Lumberjack = (function(_super) {
 
@@ -39,7 +39,32 @@
       Lumberjack.prototype.set_stats = function() {
         this.name = 'Lumberjack';
         this.phrases = ["Choppin' logs is a good way to make a livin'.", "How d'you like our little town?"];
-        return this.phrase_index = 0;
+        this.phrase_index = 0;
+        return this.selling = false;
+      };
+
+      Lumberjack.prototype.trade = function() {
+        this.logs = _.find(player.inventory, function(slot) {
+          return slot.item.id === 5;
+        });
+        if (this.logs) {
+          this.say("Looks like you've collected some logs");
+          this.say("I'll buy them from you for 3 gold each");
+          this.say("How many would you like to sell?");
+          this.selling = true;
+          return true;
+        }
+      };
+
+      Lumberjack.prototype.sell_to = function(num) {
+        if (this.logs.count < num) {
+          this.say("Sorry, you only have " + this.logs.count + " logs");
+        } else {
+          this.logs.count -= num;
+          player.coins += num * this.logs.item.value;
+          $('#response').val('');
+        }
+        return this.selling = false;
       };
 
       return Lumberjack;

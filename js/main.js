@@ -141,11 +141,21 @@
     };
     stats = null;
     return $(document).ready(function() {
+      var lumberjack;
       r.init();
       s.add_creatures(Creature);
-      s.current.npcs = [wizard, new Lumberjack];
+      lumberjack = new Lumberjack;
+      s.current.npcs = [wizard, lumberjack];
       $body.keydown(change_keys);
       $body.keyup(change_keys);
+      $('#response').keyup(function(event) {
+        if (event.which === 13) {
+          debugger;
+          if (lumberjack.selling) {
+            return lumberjack.sell_to(parseInt($(this).val()));
+          }
+        }
+      });
       load_textures();
       load_music();
       stats = new Stats;

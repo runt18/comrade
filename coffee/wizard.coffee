@@ -22,5 +22,7 @@ define(['npc'], (NPC)->
         	]
         	@phrase_index = 0
 
+        trade: ->
+
 	new Wizard
 )

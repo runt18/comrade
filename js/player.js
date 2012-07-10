@@ -9,7 +9,7 @@
     Item = (function() {
 
       function Item() {
-        this.set_id();
+        this.set_stats();
       }
 
       return Item;
@@ -23,8 +23,9 @@
         return Log.__super__.constructor.apply(this, arguments);
       }
 
-      Log.prototype.set_id = function() {
-        return this.id = 5;
+      Log.prototype.set_stats = function() {
+        this.id = 5;
+        return this.value = 3;
       };
 
       return Log;
@@ -38,8 +39,9 @@
         return Fish.__super__.constructor.apply(this, arguments);
       }
 
-      Fish.prototype.set_id = function() {
-        return this.id = 2;
+      Fish.prototype.set_stats = function() {
+        this.id = 2;
+        return this.value = 3;
       };
 
       return Fish;
@@ -53,8 +55,9 @@
         return Rock.__super__.constructor.apply(this, arguments);
       }
 
-      Rock.prototype.set_id = function() {
-        return this.id = 3;
+      Rock.prototype.set_stats = function() {
+        this.id = 3;
+        return this.value = 3;
       };
 
       return Rock;
@@ -191,7 +194,7 @@
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             npc = _ref[_i];
             if (this.in_front.x === npc.pos.x && this.in_front.y === npc.pos.y) {
-              npc.say();
+              npc.interact();
               return;
             }
           }

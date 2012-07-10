@@ -23,6 +23,7 @@ define(['perlin'], (PerlinNoise)->
             # values for controlling the output of the Perlin noise function
             @perlin_size = 5
             @perlin_z_axis = .8
+            @input = null
 
             # IDs of tiles and objects that entities cannot walk through
             @solid_things = [2, 3, 5]

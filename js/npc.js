@@ -13,15 +13,26 @@
         return NPC.__super__.constructor.apply(this, arguments);
       }
 
-      NPC.prototype.say = function() {
-        var $dialogue, phrase;
-        $dialogue = $('#dialogue');
+      NPC.prototype.chat = function() {
+        var phrase;
         phrase = this.phrases[this.phrase_index];
-        $dialogue.append($('<p>').text("" + this.name + ": " + phrase));
-        $dialogue.scrollTop($dialogue[0].scrollHeight);
+        this.say(phrase);
         this.phrase_index += 1;
         if (this.phrase_index === this.phrases.length) {
           return this.phrase_index = 0;
+        }
+      };
+
+      NPC.prototype.say = function(message) {
+        var $dialogue;
+        $dialogue = $('#dialogue');
+        $dialogue.append($('<p>').text("" + this.name + ": " + message));
+        return $dialogue.scrollTop($dialogue[0].scrollHeight);
+      };
+
+      NPC.prototype.interact = function() {
+        if (!this.trade()) {
+          return this.chat();
         }
       };
 
