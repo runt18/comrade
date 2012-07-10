@@ -36,12 +36,12 @@
         if (left === 0) {
           right += g.border;
         } else {
-          left -= g.border;
+          left -= g.border * this.x;
         }
         if (top === 0) {
           bottom += g.border;
         } else {
-          top -= g.border;
+          top -= g.border * this.y;
         }
         this.tiles = this.matrix_sub_area(g.world, left, top, right, bottom);
         this.objects = this.matrix_sub_area(g.objects, left, top, right, bottom);

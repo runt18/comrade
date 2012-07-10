@@ -50,7 +50,7 @@ define(['jquery', 'game'], ($, g)->
             @ctx.fillRect g.screen_width - width - 50, g.screen_height - 25, width * value / max, height
 
         draw_coins: (num)->
-            @draw_texture 4, 3, g.width, g.height + 1
+            @draw_texture 4, 3, g.width - 1, g.height
             @ctx.fillText num, g.screen_width - 40, g.screen_height - 10
 
 

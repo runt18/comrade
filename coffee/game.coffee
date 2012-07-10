@@ -21,8 +21,9 @@ define(['perlin'], (PerlinNoise)->
             @screen_height = @height * @tile_size + @ui_height
 
             # height and width of the whole world in tiles
-            @world_width = @width * 2
-            @world_height = @height * 2
+            @_num_scenes = 2
+            @world_width = (@width * @_num_scenes) - @_num_scenes + 1
+            @world_height = (@height * @_num_scenes) - @_num_scenes + 1
 
             # number of trees in the world
             @num_trees = 100

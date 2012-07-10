@@ -20,11 +20,11 @@ define(['game'], (g)->
             if left is 0
                 right += g.border
             else
-                left -= g.border
+                left -= g.border * @x
 
             if top is 0
                 bottom += g.border
-            else top -= g.border
+            else top -= g.border * @y
             # right += 1 if right isnt g.world_width
             # top -= 1 if top isnt 0
             # bottom += 1 if bottom isnt g.world_height

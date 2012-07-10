@@ -76,7 +76,7 @@
       };
 
       Renderer.prototype.draw_coins = function(num) {
-        this.draw_texture(4, 3, g.width, g.height + 1);
+        this.draw_texture(4, 3, g.width - 1, g.height);
         return this.ctx.fillText(num, g.screen_width - 40, g.screen_height - 10);
       };
 
