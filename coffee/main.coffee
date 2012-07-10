@@ -1,8 +1,8 @@
 require(
     ['jquery', 'game', 'scene', 'renderer',
-    'player', 'creature', 'wizard', 'lumberjack',
+    'player', 'creature', 'wizard', 'lumberjack', 'fisherman'
     'stats'],
-($, g, s, r, player, Creature, wizard, Lumberjack, Stats)->
+($, g, s, r, player, Creature, wizard, Lumberjack, Fisherman, Stats)->
 
 
     load_textures = ->
@@ -107,15 +107,17 @@ require(
 
         s.add_creatures(Creature)
         lumberjack = new Lumberjack
-        s.current.npcs = [wizard, lumberjack]
+        fisherman = new Fisherman
+        s.current.npcs = [wizard, lumberjack, fisherman]
 
         $body.keydown change_keys
         $body.keyup change_keys
         $('#response').keyup (event)->
             if event.which is 13
-                debugger
-                if lumberjack.selling
-                    lumberjack.sell_to parseInt $(this).val()
+                for npc in s.current.npcs
+                    if npc.selling
+                        npc.sell_to parseInt $(this).val()
+                        break
 
         load_textures()
         load_music()

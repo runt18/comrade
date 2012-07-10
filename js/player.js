@@ -24,6 +24,7 @@
       }
 
       Log.prototype.set_stats = function() {
+        this.name = 'log';
         this.id = 5;
         return this.value = 3;
       };
@@ -40,6 +41,7 @@
       }
 
       Fish.prototype.set_stats = function() {
+        this.name = 'fish';
         this.id = 2;
         return this.value = 3;
       };
@@ -56,6 +58,7 @@
       }
 
       Rock.prototype.set_stats = function() {
+        this.name = 'rock';
         this.id = 3;
         return this.value = 3;
       };

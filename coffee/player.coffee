@@ -5,16 +5,19 @@ define(['underscore', 'entity', 'game', 'scene'], (_, Entity, g, s)->
 
     class Log extends Item
         set_stats: ->
+            @name = 'log'
             @id = 5
             @value = 3
 
     class Fish extends Item
         set_stats: ->
+            @name = 'fish'
             @id = 2
             @value = 3
 
     class Rock extends Item
         set_stats: ->
+            @name = 'rock'
             @id = 3
             @value = 3
 

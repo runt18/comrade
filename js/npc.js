@@ -3,7 +3,7 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['entity'], function(Entity) {
+  define(['underscore', 'entity', 'player'], function(_, Entity, player) {
     var NPC;
     return NPC = (function(_super) {
 
@@ -28,6 +28,32 @@
         $dialogue = $('#dialogue');
         $dialogue.append($('<p>').text("" + this.name + ": " + message));
         return $dialogue.scrollTop($dialogue[0].scrollHeight);
+      };
+
+      NPC.prototype.trade = function() {
+        var _this = this;
+        this.slot = _.find(player.inventory, function(slot) {
+          return slot.item.id === _this.item_id;
+        });
+        if (this.slot) {
+          this.say("Looks like you've collected some " + this.slot.item.name);
+          this.say("I'll buy them from you for " + this.slot.item.value + " gold each");
+          this.say("How many would you like to sell?");
+          this.selling = true;
+          return true;
+        }
+      };
+
+      NPC.prototype.sell_to = function(num) {
+        if (this.slot.count < num) {
+          this.say("Sorry, you only have " + this.slot.count + " " + this.slot.item.name);
+        } else {
+          this.slot.count -= num;
+          player.coins += num * this.slot.item.value;
+          $('#response').val('');
+          this.say("Nice doing business with you");
+        }
+        return this.selling = false;
       };
 
       NPC.prototype.interact = function() {
