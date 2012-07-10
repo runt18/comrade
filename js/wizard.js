@@ -3,7 +3,7 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['npc'], function(NPC) {
+  define(['npc', 'game'], function(NPC, g) {
     var Wizard;
     Wizard = (function(_super) {
 
@@ -38,7 +38,7 @@
 
       Wizard.prototype.set_stats = function() {
         this.name = 'Wizard';
-        this.phrases = ['Hello', 'Welcome to Comrade', 'If you want to earn some money, try gathering some resources', "I'll buy logs, fish and rocks", 'You can use this money to buy better tools', 'You can also buy weapons and armour to fight the spiders', "Here's a Basic Pickaxe to get you started. Try mining some rocks."];
+        this.phrases = ['Hello', "Welcome to " + g.name, 'If you want to earn some money, try gathering some resources', "I'll buy logs, fish and rocks", 'You can use this money to buy better tools', 'You can also buy weapons and armour to fight the spiders', "Here's a Basic Pickaxe to get you started. Try mining some rocks."];
         return this.phrase_index = 0;
       };
 

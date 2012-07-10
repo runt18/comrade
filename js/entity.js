@@ -41,13 +41,16 @@
       }
 
       Entity.prototype.set_position = function() {
-        var scene;
+        var index, scene;
         if (this.scene_pos) {
           scene = s.scenes[this.scene_pos.x][this.scene_pos.y];
         } else {
           scene = s.current;
         }
-        return this.pos = this.pos || scene.empty_tiles[Math.floor(Math.random() * scene.empty_tiles.length)];
+        if (!this.pos) {
+          index = Math.floor(Math.random() * scene.empty_tiles.length);
+          return this.pos = scene.empty_tiles.splice(index, 1)[0];
+        }
       };
 
       Entity.prototype.set_image = function() {

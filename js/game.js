@@ -8,9 +8,11 @@
 
       function Game() {
         var x, y;
+        this.name = 'Comrade';
         this.ui_height = 30;
-        this.width = 30;
-        this.height = 20;
+        this.border = 1;
+        this.width = 20 + this.border;
+        this.height = 20 + this.border;
         this.tile_size = 30;
         this.screen_width = this.width * this.tile_size;
         this.screen_height = this.height * this.tile_size + this.ui_height;

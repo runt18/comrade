@@ -1,4 +1,4 @@
-define(['npc'], (NPC)->
+define(['npc', 'game'], (NPC, g)->
 	class Wizard extends NPC
 		move_scene: ->
 
@@ -13,7 +13,7 @@ define(['npc'], (NPC)->
         	@name = 'Wizard'
         	@phrases = [
         		'Hello'
-        		'Welcome to Comrade'
+        		"Welcome to #{g.name}"
         		'If you want to earn some money, try gathering some resources'
         		"I'll buy logs, fish and rocks"
         		'You can use this money to buy better tools'

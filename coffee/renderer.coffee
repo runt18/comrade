@@ -1,13 +1,20 @@
 define(['jquery', 'game'], ($, g)->
     class Renderer
         init: ->
+            $('title').text g.name
+            $('h1').text g.name
+
             $canvas = $ '<canvas>'
+            $game = $ '#game'
             window.$body = $ 'body'
-            $('#game').html $canvas
+            $game.html $canvas
             canvas = $canvas[0]
 
             canvas.width = g.screen_width
             canvas.height = g.screen_height
+
+            $game.height g.screen_height
+            $('#container').width g.screen_width
 
             @ctx = canvas.getContext '2d'
 
@@ -36,12 +43,14 @@ define(['jquery', 'game'], ($, g)->
 
         draw_health_bar: (value, max)->
             height = 20
+            padding = (g.ui_height - height) / 2
+            width = 120
             @ctx.fillStyle = @ctx.strokeStyle = 'red'
-            @ctx.strokeRect g.screen_width - 200, g.screen_height - 25, 100, height
-            @ctx.fillRect g.screen_width - 200, g.screen_height - 25, 100 * value / max, height
+            @ctx.strokeRect g.screen_width - width - 50, g.screen_height - height - padding, width, height
+            @ctx.fillRect g.screen_width - width - 50, g.screen_height - 25, width * value / max, height
 
         draw_coins: (num)->
-            @draw_texture 4, 3, 29, 20
+            @draw_texture 4, 3, g.width, g.height + 1
             @ctx.fillText num, g.screen_width - 40, g.screen_height - 10
 
 

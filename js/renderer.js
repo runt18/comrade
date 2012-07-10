@@ -8,13 +8,18 @@
       function Renderer() {}
 
       Renderer.prototype.init = function() {
-        var $canvas, canvas;
+        var $canvas, $game, canvas;
+        $('title').text(g.name);
+        $('h1').text(g.name);
         $canvas = $('<canvas>');
+        $game = $('#game');
         window.$body = $('body');
-        $('#game').html($canvas);
+        $game.html($canvas);
         canvas = $canvas[0];
         canvas.width = g.screen_width;
         canvas.height = g.screen_height;
+        $game.height(g.screen_height);
+        $('#container').width(g.screen_width);
         return this.ctx = canvas.getContext('2d');
       };
 
@@ -61,15 +66,17 @@
       };
 
       Renderer.prototype.draw_health_bar = function(value, max) {
-        var height;
+        var height, padding, width;
         height = 20;
+        padding = (g.ui_height - height) / 2;
+        width = 120;
         this.ctx.fillStyle = this.ctx.strokeStyle = 'red';
-        this.ctx.strokeRect(g.screen_width - 200, g.screen_height - 25, 100, height);
-        return this.ctx.fillRect(g.screen_width - 200, g.screen_height - 25, 100 * value / max, height);
+        this.ctx.strokeRect(g.screen_width - width - 50, g.screen_height - height - padding, width, height);
+        return this.ctx.fillRect(g.screen_width - width - 50, g.screen_height - 25, width * value / max, height);
       };
 
       Renderer.prototype.draw_coins = function(num) {
-        this.draw_texture(4, 3, 29, 20);
+        this.draw_texture(4, 3, g.width, g.height + 1);
         return this.ctx.fillText(num, g.screen_width - 40, g.screen_height - 10);
       };
 

@@ -16,21 +16,35 @@
         this.num_creatures = 10;
       }
 
-      Scene.prototype.matrix_sub_area = function(matrix, x, y, width, height) {
+      Scene.prototype.matrix_sub_area = function(matrix, left, top, right, bottom) {
         var row, _i, _len, _ref, _results;
-        _ref = matrix.slice(y, (y + height - 1) + 1 || 9e9);
+        _ref = matrix.slice(top, (bottom - 1) + 1 || 9e9);
         _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           row = _ref[_i];
-          _results.push(row.slice(x, (x + width - 1) + 1 || 9e9));
+          _results.push(row.slice(left, (right - 1) + 1 || 9e9));
         }
         return _results;
       };
 
       Scene.prototype.load = function() {
-        var cell, row, x, y, _i, _len, _ref, _results;
-        this.tiles = this.matrix_sub_area(g.world, this.x * g.width, this.y * g.height, g.width, g.height);
-        this.objects = this.matrix_sub_area(g.objects, this.x * g.width, this.y * g.height, g.width, g.height);
+        var bottom, cell, left, right, row, top, x, y, _i, _len, _ref, _results;
+        left = this.x * g.width;
+        top = this.y * g.height;
+        right = (this.x + 1) * g.width;
+        bottom = (this.y + 1) * g.height;
+        if (left === 0) {
+          right += g.border;
+        } else {
+          left -= g.border;
+        }
+        if (top === 0) {
+          bottom += g.border;
+        } else {
+          top -= g.border;
+        }
+        this.tiles = this.matrix_sub_area(g.world, left, top, right, bottom);
+        this.objects = this.matrix_sub_area(g.objects, left, top, right, bottom);
         _ref = this.tiles;
         _results = [];
         for (y = _i = 0, _len = _ref.length; _i < _len; y = ++_i) {

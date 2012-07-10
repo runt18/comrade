@@ -8,12 +8,29 @@ define(['game'], (g)->
             @load()
             @num_creatures = 10
 
-        matrix_sub_area: (matrix, x, y, width, height)->
-            (row[x..x + width - 1] for row in matrix[y..y + height - 1])
+        matrix_sub_area: (matrix, left, top, right, bottom)->
+            (row[left..right - 1] for row in matrix[top..bottom - 1])
 
         load: ->
-            @tiles = @matrix_sub_area g.world, @x * g.width, @y * g.height, g.width, g.height
-            @objects = @matrix_sub_area g.objects, @x * g.width, @y * g.height, g.width, g.height
+            left = @x * g.width
+            top = @y * g.height
+            right = (@x + 1) * g.width
+            bottom = (@y + 1) * g.height
+
+            if left is 0
+                right += g.border
+            else
+                left -= g.border
+
+            if top is 0
+                bottom += g.border
+            else top -= g.border
+            # right += 1 if right isnt g.world_width
+            # top -= 1 if top isnt 0
+            # bottom += 1 if bottom isnt g.world_height
+
+            @tiles = @matrix_sub_area g.world, left, top, right, bottom
+            @objects = @matrix_sub_area g.objects, left, top, right, bottom
             for row, y in @tiles
                 for cell, x in row
                     @empty_tiles.push(x: x, y: y) unless cell in g.solid_things

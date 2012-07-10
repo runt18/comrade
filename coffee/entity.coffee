@@ -24,7 +24,11 @@ define(['game', 'scene', 'renderer'], (g, s, r)->
                 scene = s.scenes[@scene_pos.x][@scene_pos.y]
             else
                 scene = s.current
-            @pos = @pos or scene.empty_tiles[Math.floor Math.random() * scene.empty_tiles.length]
+            if not @pos
+                # choose a random empty space for the entity to start in
+                index = Math.floor Math.random() * scene.empty_tiles.length
+                # assign the coordinates and remove it from the list so no other entites can use it
+                @pos = scene.empty_tiles.splice(index, 1)[0]
 
         set_image: ->
             switch @axis

@@ -1,14 +1,21 @@
 define(['perlin'], (PerlinNoise)->
     class Game
         constructor: ->
+            @name = 'Comrade'
+
             # height of the UI below the main game area in pixels
             @ui_height = 30
+
+            # number of tiles overlap between scenes
+            @border = 1
+
             # TODO move these to the Scene class
             # width and height of one scene in tiles
-            @width = 30
-            @height = 20
+            @width = 20 + @border
+            @height = 20 + @border
             # size of one tile in pixels
             @tile_size = 30
+
             # width and height of the entire game screen in pixels
             @screen_width = @width * @tile_size
             @screen_height = @height * @tile_size + @ui_height
