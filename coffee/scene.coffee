@@ -6,7 +6,7 @@ define(['game'], (g)->
             @empty_tiles = []
             @objects = []
             @load()
-            @num_creatures = 10
+            @num_creatures = 6
 
         matrix_sub_area: (matrix, left, top, right, bottom)->
             (row[left..right - 1] for row in matrix[top..bottom - 1])

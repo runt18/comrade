@@ -17,8 +17,12 @@ require.config({
 
         'plugins': 'plugins',
         'keymaster': 'vendor/keymaster',
+
         'underscore': 'vendor/underscore',
         'perlin': 'vendor/perlin',
+        'astar': 'vendor/astar',
+        'graph': 'vendor/graph',
+
         'stats': 'vendor/stats'
     },
 
@@ -33,6 +37,15 @@ require.config({
 
         'stats': {
             exports: 'Stats'
+        },
+
+
+        'astar': {
+            exports: 'astar'
+        },
+
+        'graph': {
+            exports: 'Graph'
         }
         // 'backbone': {
         //     deps: ['underscore', 'jquery'],

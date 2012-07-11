@@ -75,27 +75,22 @@
       }
 
       Player.prototype.move_scene = function() {
-        var item, new_scene, _i, _len, _ref;
+        var axis, dimension, new_scene, _ref;
         new_scene = false;
-        _ref = [
-          {
-            axis: 'x',
-            dimension: g.width
-          }, {
-            axis: 'y',
-            dimension: g.height
-          }
-        ];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          item = _ref[_i];
-          if (this.pos[item.axis] === 0 && this.axis === item.axis && this.direction === -1) {
-            this.pos[item.axis] = item.dimension;
-            s.pos[item.axis] -= 1;
+        _ref = {
+          x: g.width,
+          y: g.height
+        };
+        for (axis in _ref) {
+          dimension = _ref[axis];
+          if (this.pos[axis] === 0 && this.axis === axis && this.direction === -1) {
+            this.pos[axis] = dimension;
+            s.pos[axis] -= 1;
             new_scene = true;
           }
-          if (this.pos[item.axis] === item.dimension - 1 && this.axis === item.axis && this.direction === 1) {
-            this.pos[item.axis] = -1;
-            s.pos[item.axis] += 1;
+          if (this.pos[axis] === dimension - 1 && this.axis === axis && this.direction === 1) {
+            this.pos[axis] = -1;
+            s.pos[axis] += 1;
             new_scene = true;
           }
         }
@@ -190,7 +185,7 @@
         }
       };
 
-      Player.prototype.interact = function() {
+      Player.prototype.interact = function(tick) {
         var npc, _i, _len, _ref;
         if (s.current.npcs) {
           _ref = s.current.npcs;
@@ -205,7 +200,9 @@
         if (this.attack_creature()) {
           return;
         }
-        return this.gather_resource();
+        if (tick % 50 === 0) {
+          return this.gather_resource();
+        }
       };
 
       return Player;

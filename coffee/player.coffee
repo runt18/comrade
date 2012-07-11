@@ -24,14 +24,14 @@ define(['underscore', 'entity', 'game', 'scene'], (_, Entity, g, s)->
     class Player extends Entity
         move_scene: ->
             new_scene = false
-            for item in [{axis: 'x', dimension: g.width}, {axis: 'y', dimension: g.height}]
-                if @pos[item.axis] is 0 and @axis is item.axis and @direction is -1
-                    @pos[item.axis] = item.dimension
-                    s.pos[item.axis] -= 1
+            for axis, dimension of {x: g.width, y: g.height}
+                if @pos[axis] is 0 and @axis is axis and @direction is -1
+                    @pos[axis] = dimension
+                    s.pos[axis] -= 1
                     new_scene = true
-                if @pos[item.axis] is item.dimension - 1 and @axis is item.axis and @direction is 1
-                    @pos[item.axis] = -1
-                    s.pos[item.axis] += 1
+                if @pos[axis] is dimension - 1 and @axis is axis and @direction is 1
+                    @pos[axis] = -1
+                    s.pos[axis] += 1
                     new_scene = true
 
             s.set() if new_scene
@@ -88,7 +88,7 @@ define(['underscore', 'entity', 'game', 'scene'], (_, Entity, g, s)->
                 if not free_slots
                     log 'inventory full'
 
-        interact: ->
+        interact: (tick)->
             if s.current.npcs
                 for npc in s.current.npcs
                     if @in_front.x is npc.pos.x and @in_front.y is npc.pos.y
@@ -99,7 +99,8 @@ define(['underscore', 'entity', 'game', 'scene'], (_, Entity, g, s)->
 
             # if there's no creature in front to attack, see if there's a resource to gather
 
-            @gather_resource()
+            if tick % 50 is 0
+                @gather_resource()
 
 
     new Player

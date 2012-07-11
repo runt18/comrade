@@ -13,7 +13,7 @@
         this.empty_tiles = [];
         this.objects = [];
         this.load();
-        this.num_creatures = 10;
+        this.num_creatures = 6;
       }
 
       Scene.prototype.matrix_sub_area = function(matrix, left, top, right, bottom) {

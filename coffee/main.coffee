@@ -2,7 +2,7 @@ require(
     ['jquery', 'game', 'scene', 'renderer',
     'player', 'creature', 'wizard', 'lumberjack', 'fisherman'
     'stats'],
-($, g, s, r, player, Creature, wizard, Lumberjack, Fisherman, Stats)->
+($, g, s, r, player, Creature, wizard, Lumberjack, Fisherman, Stats, astar, Graph)->
 
 
     load_textures = ->
@@ -48,11 +48,11 @@ require(
         player.move 'y', 1 if keys_down.s
         player.move 'x', 1 if keys_down.d
 
-        if tick % 20 is 0
-            if keys_down.l
+        if keys_down.l
+            if tick % 20 is 0
                 s.current.creatures.push new Creature x: player.in_front.x, y: player.in_front.y
-            if keys_down.k
-                player.interact()
+        if keys_down.k
+            player.interact(tick)
 
         r.clear()
         r.draw_block x, y, tile for tile, x in row for row, y in s.current.tiles
@@ -60,10 +60,16 @@ require(
 
         for creature in s.current.creatures
             if tick % 10 is 0
-                if Math.random() > 0.9
-                    axis = if Math.random() > 0.5 then 'x' else 'y'
-                    direction = if Math.random() > 0.5 then 1 else -1
-                    creature.move(axis, direction)
+                # if Math.random() > 0
+                #     axis = if Math.random() > 0.5 then 'x' else 'y'
+                #     direction = if Math.random() > 0.5 then 1 else -1
+                #     creature.move(axis, direction)
+                if creature.pathfinding
+                    creature.move_along_path()
+                else
+                    if Math.random() > 0.9
+                        creature.pathfind()
+
             creature.animate()
 
         if s.current.npcs
