@@ -3,7 +3,7 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['entity', 'game', 'scene', 'graph', 'astar'], function(Entity, g, s, Graph, astar) {
+  define(['entity', 'game', 'scene', 'astar'], function(Entity, g, s, astar) {
     var Creature;
     return Creature = (function(_super) {
 
@@ -19,7 +19,7 @@
         this.health = 5;
         this.attack = 1;
         this.pathfind();
-        return this.pathfinding = false;
+        return this.moving_along_path = false;
       };
 
       Creature.prototype.create_images = function() {
@@ -43,19 +43,24 @@
         };
       };
 
-      Creature.prototype.pathfind = function() {
-        var end, graph, start;
-        graph = new Graph(g.objects);
-        start = graph.nodes[this.pos.x][this.pos.y];
-        end = s.current.empty_tiles[Math.floor(Math.random() * s.current.empty_tiles.length)];
-        end = graph.nodes[end.x][end.y];
-        this.path = astar.search(graph.nodes, start, end);
+      Creature.prototype.pathfind = function(end_coords) {
+        var end, start;
+        start = s.current.graph.nodes[this.pos.x][this.pos.y];
+        if (!end_coords) {
+          end_coords = s.current.empty_tiles[Math.floor(Math.random() * s.current.empty_tiles.length)];
+        }
+        end = s.current.graph.nodes[end_coords.x][end_coords.y];
+        this.path = astar.search(s.current.graph.nodes, start, end);
         this.pathi = 0;
-        return this.pathfinding = true;
+        return this.moving_along_path = true;
       };
 
       Creature.prototype.move_along_path = function() {
         var axis, direction, next_point;
+        if (this.pathi === this.path.length) {
+          this.moving_along_path = false;
+          return;
+        }
         next_point = this.path[this.pathi];
         if (next_point.x === Math.round(this.pos.x)) {
           direction = next_point.y - this.pos.y;
@@ -65,10 +70,7 @@
           axis = 'x';
         }
         this.move(axis, direction);
-        this.pathi += 1;
-        if (this.pathi === this.path.length) {
-          return this.pathfinding = false;
-        }
+        return this.pathi += 1;
       };
 
       return Creature;

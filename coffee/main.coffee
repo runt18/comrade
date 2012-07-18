@@ -55,20 +55,20 @@ require(
             player.interact(tick)
 
         r.clear()
-        r.draw_block x, y, tile for tile, x in row for row, y in s.current.tiles
-        r.draw_object x, y, object for object, x in row for row, y in s.current.objects
+        r.draw_block x, y, tile for tile, y in column for column, x in s.current.tiles
+        r.draw_object x, y, object for object, y in column for column, x in s.current.objects
 
         for creature in s.current.creatures
             if tick % 10 is 0
-                # if Math.random() > 0
+                # if Math.random() > 0.9
                 #     axis = if Math.random() > 0.5 then 'x' else 'y'
                 #     direction = if Math.random() > 0.5 then 1 else -1
                 #     creature.move(axis, direction)
-                if creature.pathfinding
+                if creature.moving_along_path
                     creature.move_along_path()
                 else
                     if Math.random() > 0.9
-                        creature.pathfind()
+                        creature.pathfind({x: 10, y: 10})
 
             creature.animate()
 

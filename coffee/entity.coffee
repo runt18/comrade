@@ -46,8 +46,8 @@ define(['game', 'scene', 'renderer'], (g, s, r)->
 
             try
                 # Get the contents of the tile that it's trying to move to
-                @next_tile = s.current.tiles[@in_front.y][@in_front.x]
-                @next_object = s.current.objects[@in_front.y][@in_front.x]
+                @next_tile = s.current.tiles[@in_front.x][@in_front.y]
+                @next_object = s.current.objects[@in_front.x][@in_front.y]
             catch TypeError
 
         snap_to_grid: ->

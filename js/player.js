@@ -187,13 +187,15 @@
 
       Player.prototype.interact = function(tick) {
         var npc, _i, _len, _ref;
-        if (s.current.npcs) {
-          _ref = s.current.npcs;
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            npc = _ref[_i];
-            if (this.in_front.x === npc.pos.x && this.in_front.y === npc.pos.y) {
-              npc.interact();
-              return;
+        if (tick % 20 === 0) {
+          if (s.current.npcs) {
+            _ref = s.current.npcs;
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              npc = _ref[_i];
+              if (this.in_front.x === npc.pos.x && this.in_front.y === npc.pos.y) {
+                npc.interact();
+                return;
+              }
             }
           }
         }

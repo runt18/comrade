@@ -80,8 +80,8 @@
             };
         }
         try {
-          this.next_tile = s.current.tiles[this.in_front.y][this.in_front.x];
-          return this.next_object = s.current.objects[this.in_front.y][this.in_front.x];
+          this.next_tile = s.current.tiles[this.in_front.x][this.in_front.y];
+          return this.next_object = s.current.objects[this.in_front.x][this.in_front.y];
         } catch (TypeError) {
 
         }

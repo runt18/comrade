@@ -8,6 +8,8 @@ define(['perlin'], (PerlinNoise)->
 
             # number of tiles overlap between scenes
             @border = 1
+            # id of tile that surrounds the entire world to stop entities going outside the world
+            border_tile = 2
 
             # TODO move these to the Scene class
             # width and height of one scene in tiles
@@ -41,9 +43,11 @@ define(['perlin'], (PerlinNoise)->
             @empty_tiles = []
 
             # 2d array of IDs of objects (trees etc.)
-            @objects = (0 for x in [0..@world_width - 1] for y in [0..@world_height - 1])
+            @objects = (0 for y in [0..@world_height - 1] for x in [0..@world_width - 1])
+
+            @obstacles = (0 for y in [0..@world_height - 1] for x in [0..@world_width - 1])
             # 2d array of IDs of tiles (grass, water etc.)
-            @world = (3 for x in [0..@world_width - 1] for y in [0..@world_height - 1])
+            @world = (border_tile for y in [0..@world_height - 1] for x in [0..@world_width - 1])
 
             @generate_world()
             @add_trees()
@@ -52,14 +56,17 @@ define(['perlin'], (PerlinNoise)->
             for i in [1..@num_trees]
                 index = Math.floor Math.random() * @empty_tiles.length
                 tree = @empty_tiles.splice(index, 1)[0]
-                @objects[tree.y][tree.x] = 5
+                @objects[tree.x][tree.y] = 5
+                @obstacles[tree.x][tree.y] = 1
 
         generate_world: ->
-            for y in [1..@world_height - 2]
-                for x in [1..@world_width - 2]
+            for x in [1..@world_width - 2]
+                for y in [1..@world_height - 2]
                     tile = @block_type PerlinNoise @perlin_size * x / @world_width, @perlin_size * y / @world_height, @perlin_z_axis
-                    @world[y][x] = tile
-                    @empty_tiles.push(x: x, y: y) unless tile in @solid_things
+                    @world[x][y] = tile
+                    unless tile in @solid_things
+                        @empty_tiles.push(x: x, y: y)
+                        @obstacles[x][y] = 1
 
         block_type: (height)->
             return 2 if height <= .3

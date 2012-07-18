@@ -89,11 +89,12 @@ define(['underscore', 'entity', 'game', 'scene'], (_, Entity, g, s)->
                     log 'inventory full'
 
         interact: (tick)->
-            if s.current.npcs
-                for npc in s.current.npcs
-                    if @in_front.x is npc.pos.x and @in_front.y is npc.pos.y
-                        npc.interact()
-                        return
+            if tick % 20 is 0
+                if s.current.npcs
+                    for npc in s.current.npcs
+                        if @in_front.x is npc.pos.x and @in_front.y is npc.pos.y
+                            npc.interact()
+                            return
 
             return if @attack_creature()
 

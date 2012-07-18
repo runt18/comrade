@@ -7,10 +7,11 @@
     Game = (function() {
 
       function Game() {
-        var x, y;
+        var border_tile, x, y;
         this.name = 'Comrade';
         this.ui_height = 30;
         this.border = 1;
+        border_tile = 2;
         this.width = 20 + this.border;
         this.height = 20 + this.border;
         this.tile_size = 30;
@@ -29,11 +30,26 @@
         this.objects = (function() {
           var _i, _ref, _results;
           _results = [];
-          for (y = _i = 0, _ref = this.world_height - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; y = 0 <= _ref ? ++_i : --_i) {
+          for (x = _i = 0, _ref = this.world_width - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; x = 0 <= _ref ? ++_i : --_i) {
             _results.push((function() {
               var _j, _ref1, _results1;
               _results1 = [];
-              for (x = _j = 0, _ref1 = this.world_width - 1; 0 <= _ref1 ? _j <= _ref1 : _j >= _ref1; x = 0 <= _ref1 ? ++_j : --_j) {
+              for (y = _j = 0, _ref1 = this.world_height - 1; 0 <= _ref1 ? _j <= _ref1 : _j >= _ref1; y = 0 <= _ref1 ? ++_j : --_j) {
+                _results1.push(0);
+              }
+              return _results1;
+            }).call(this));
+          }
+          return _results;
+        }).call(this);
+        this.obstacles = (function() {
+          var _i, _ref, _results;
+          _results = [];
+          for (x = _i = 0, _ref = this.world_width - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; x = 0 <= _ref ? ++_i : --_i) {
+            _results.push((function() {
+              var _j, _ref1, _results1;
+              _results1 = [];
+              for (y = _j = 0, _ref1 = this.world_height - 1; 0 <= _ref1 ? _j <= _ref1 : _j >= _ref1; y = 0 <= _ref1 ? ++_j : --_j) {
                 _results1.push(0);
               }
               return _results1;
@@ -44,12 +60,12 @@
         this.world = (function() {
           var _i, _ref, _results;
           _results = [];
-          for (y = _i = 0, _ref = this.world_height - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; y = 0 <= _ref ? ++_i : --_i) {
+          for (x = _i = 0, _ref = this.world_width - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; x = 0 <= _ref ? ++_i : --_i) {
             _results.push((function() {
               var _j, _ref1, _results1;
               _results1 = [];
-              for (x = _j = 0, _ref1 = this.world_width - 1; 0 <= _ref1 ? _j <= _ref1 : _j >= _ref1; x = 0 <= _ref1 ? ++_j : --_j) {
-                _results1.push(3);
+              for (y = _j = 0, _ref1 = this.world_height - 1; 0 <= _ref1 ? _j <= _ref1 : _j >= _ref1; y = 0 <= _ref1 ? ++_j : --_j) {
+                _results1.push(border_tile);
               }
               return _results1;
             }).call(this));
@@ -66,7 +82,8 @@
         for (i = _i = 1, _ref = this.num_trees; 1 <= _ref ? _i <= _ref : _i >= _ref; i = 1 <= _ref ? ++_i : --_i) {
           index = Math.floor(Math.random() * this.empty_tiles.length);
           tree = this.empty_tiles.splice(index, 1)[0];
-          _results.push(this.objects[tree.y][tree.x] = 5);
+          this.objects[tree.x][tree.y] = 5;
+          _results.push(this.obstacles[tree.x][tree.y] = 1);
         }
         return _results;
       };
@@ -74,18 +91,19 @@
       Game.prototype.generate_world = function() {
         var tile, x, y, _i, _ref, _results;
         _results = [];
-        for (y = _i = 1, _ref = this.world_height - 2; 1 <= _ref ? _i <= _ref : _i >= _ref; y = 1 <= _ref ? ++_i : --_i) {
+        for (x = _i = 1, _ref = this.world_width - 2; 1 <= _ref ? _i <= _ref : _i >= _ref; x = 1 <= _ref ? ++_i : --_i) {
           _results.push((function() {
             var _j, _ref1, _results1;
             _results1 = [];
-            for (x = _j = 1, _ref1 = this.world_width - 2; 1 <= _ref1 ? _j <= _ref1 : _j >= _ref1; x = 1 <= _ref1 ? ++_j : --_j) {
+            for (y = _j = 1, _ref1 = this.world_height - 2; 1 <= _ref1 ? _j <= _ref1 : _j >= _ref1; y = 1 <= _ref1 ? ++_j : --_j) {
               tile = this.block_type(PerlinNoise(this.perlin_size * x / this.world_width, this.perlin_size * y / this.world_height, this.perlin_z_axis));
-              this.world[y][x] = tile;
+              this.world[x][y] = tile;
               if (__indexOf.call(this.solid_things, tile) < 0) {
-                _results1.push(this.empty_tiles.push({
+                this.empty_tiles.push({
                   x: x,
                   y: y
-                }));
+                });
+                _results1.push(this.obstacles[x][y] = 1);
               } else {
                 _results1.push(void 0);
               }

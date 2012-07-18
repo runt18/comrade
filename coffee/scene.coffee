@@ -1,4 +1,4 @@
-define(['game'], (g)->
+define(['game', 'graph'], (g, Graph)->
 
     class Scene
         constructor: (@x, @y)->
@@ -31,6 +31,9 @@ define(['game'], (g)->
 
             @tiles = @matrix_sub_area g.world, left, top, right, bottom
             @objects = @matrix_sub_area g.objects, left, top, right, bottom
+            @obstacles = @matrix_sub_area g.obstacles, left, top, right, bottom
+            @graph = new Graph @obstacles
+
             for row, y in @tiles
                 for cell, x in row
                     @empty_tiles.push(x: x, y: y) unless cell in g.solid_things
@@ -43,10 +46,10 @@ define(['game'], (g)->
                 y: 0
             @scenes = []
 
-            for x in [0..@num - 1]
-                @scenes[x] = []
-                for y in [0..@num - 1]
-                    @scenes[x][y] = new Scene(x, y)
+            for y in [0..@num - 1]
+                @scenes[y] = []
+                for x in [0..@num - 1]
+                    @scenes[y][x] = new Scene(x, y)
 
             @set()
 
@@ -54,8 +57,8 @@ define(['game'], (g)->
             @current = @scenes[@pos.x][@pos.y]
 
         add_creatures: (Creature)->
-            for row , x in @scenes
-                for scene, y in row
+            for column, y in @scenes
+                for scene, x in column
                     scene.creatures = (new Creature(null, {x: x, y: y}) for i in [1..scene.num_creatures])
 
 

@@ -36,7 +36,7 @@
     };
     tick = 0;
     render = function(time) {
-      var creature, npc, object, row, tile, x, y, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _m, _n, _ref, _ref1, _ref2, _ref3;
+      var column, creature, npc, object, tile, x, y, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _m, _n, _ref, _ref1, _ref2, _ref3;
       stats.begin();
       if (keys_down.w) {
         player.move('y', -1);
@@ -63,18 +63,18 @@
       }
       r.clear();
       _ref = s.current.tiles;
-      for (y = _i = 0, _len = _ref.length; _i < _len; y = ++_i) {
-        row = _ref[y];
-        for (x = _j = 0, _len1 = row.length; _j < _len1; x = ++_j) {
-          tile = row[x];
+      for (x = _i = 0, _len = _ref.length; _i < _len; x = ++_i) {
+        column = _ref[x];
+        for (y = _j = 0, _len1 = column.length; _j < _len1; y = ++_j) {
+          tile = column[y];
           r.draw_block(x, y, tile);
         }
       }
       _ref1 = s.current.objects;
-      for (y = _k = 0, _len2 = _ref1.length; _k < _len2; y = ++_k) {
-        row = _ref1[y];
-        for (x = _l = 0, _len3 = row.length; _l < _len3; x = ++_l) {
-          object = row[x];
+      for (x = _k = 0, _len2 = _ref1.length; _k < _len2; x = ++_k) {
+        column = _ref1[x];
+        for (y = _l = 0, _len3 = column.length; _l < _len3; y = ++_l) {
+          object = column[y];
           r.draw_object(x, y, object);
         }
       }
@@ -82,11 +82,14 @@
       for (_m = 0, _len4 = _ref2.length; _m < _len4; _m++) {
         creature = _ref2[_m];
         if (tick % 10 === 0) {
-          if (creature.pathfinding) {
+          if (creature.moving_along_path) {
             creature.move_along_path();
           } else {
             if (Math.random() > 0.9) {
-              creature.pathfind();
+              creature.pathfind({
+                x: 10,
+                y: 10
+              });
             }
           }
         }

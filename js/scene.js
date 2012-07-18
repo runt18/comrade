@@ -2,7 +2,7 @@
 (function() {
   var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-  define(['game'], function(g) {
+  define(['game', 'graph'], function(g, Graph) {
     var Scene, Scenes;
     Scene = (function() {
 
@@ -45,6 +45,8 @@
         }
         this.tiles = this.matrix_sub_area(g.world, left, top, right, bottom);
         this.objects = this.matrix_sub_area(g.objects, left, top, right, bottom);
+        this.obstacles = this.matrix_sub_area(g.obstacles, left, top, right, bottom);
+        this.graph = new Graph(this.obstacles);
         _ref = this.tiles;
         _results = [];
         for (y = _i = 0, _len = _ref.length; _i < _len; y = ++_i) {
@@ -82,10 +84,10 @@
           y: 0
         };
         this.scenes = [];
-        for (x = _i = 0, _ref = this.num - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; x = 0 <= _ref ? ++_i : --_i) {
-          this.scenes[x] = [];
-          for (y = _j = 0, _ref1 = this.num - 1; 0 <= _ref1 ? _j <= _ref1 : _j >= _ref1; y = 0 <= _ref1 ? ++_j : --_j) {
-            this.scenes[x][y] = new Scene(x, y);
+        for (y = _i = 0, _ref = this.num - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; y = 0 <= _ref ? ++_i : --_i) {
+          this.scenes[y] = [];
+          for (x = _j = 0, _ref1 = this.num - 1; 0 <= _ref1 ? _j <= _ref1 : _j >= _ref1; x = 0 <= _ref1 ? ++_j : --_j) {
+            this.scenes[y][x] = new Scene(x, y);
           }
         }
         this.set();
@@ -96,16 +98,16 @@
       };
 
       Scenes.prototype.add_creatures = function(Creature) {
-        var i, row, scene, x, y, _i, _len, _ref, _results;
+        var column, i, scene, x, y, _i, _len, _ref, _results;
         _ref = this.scenes;
         _results = [];
-        for (x = _i = 0, _len = _ref.length; _i < _len; x = ++_i) {
-          row = _ref[x];
+        for (y = _i = 0, _len = _ref.length; _i < _len; y = ++_i) {
+          column = _ref[y];
           _results.push((function() {
             var _j, _len1, _results1;
             _results1 = [];
-            for (y = _j = 0, _len1 = row.length; _j < _len1; y = ++_j) {
-              scene = row[y];
+            for (x = _j = 0, _len1 = column.length; _j < _len1; x = ++_j) {
+              scene = column[x];
               _results1.push(scene.creatures = (function() {
                 var _k, _ref1, _results2;
                 _results2 = [];
