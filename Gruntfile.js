@@ -72,9 +72,9 @@ module.exports = function(grunt) {
       glob_to_multiple: {
         expand: true,
         flatten: false,
-        cwd: '.',
-        src: ['coffee/*.coffee'],
-        dest: 'js/',
+        cwd: 'coffee',
+        src: ['*.coffee'],
+        dest: '../js/',
         ext: '.js'
       }
     }
