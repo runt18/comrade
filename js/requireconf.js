@@ -1,5 +1,5 @@
 require.config({
-    baseUrl: '',
+    baseUrl: 'js',
 
     paths: {
         'jquery': 'vendor/jquery/jquery',
