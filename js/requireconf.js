@@ -20,7 +20,7 @@ require.config({
 
         'underscore': 'vendor/underscore/underscore',
         'pathfinding': 'vendor/PathFinding.js/lib/pathfinding-browser',
-        'perlin': 'vendor/perlin',
+        'noise': 'vendor/noisejs/index',
 
         'stats': 'vendor/stats.js/src/Stats'
     },
