@@ -19,9 +19,8 @@ require.config({
         'keymaster': 'vendor/keymaster/keymaster',
 
         'underscore': 'vendor/underscore/underscore',
+        'pathfinding': 'vendor/PathFinding.js/lib/pathfinding-browser',
         'perlin': 'vendor/perlin',
-        'astar': 'vendor/astar',
-        'graph': 'vendor/graph',
 
         'stats': 'vendor/stats.js/src/Stats'
     },
@@ -37,15 +36,8 @@ require.config({
 
         'stats': {
             exports: 'Stats'
-        },
-
-        'astar': {
-            exports: 'astar'
-        },
-
-        'graph': {
-            exports: 'Graph'
         }
+
         // 'backbone': {
         //     deps: ['underscore', 'jquery'],
         //     exports: 'Backbone'
