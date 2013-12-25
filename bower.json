@@ -1,0 +1,24 @@
+{
+  "name": "comrade",
+  "version": "0.0.1",
+  "homepage": "https://github.com/lavelle/Comrade",
+  "authors": [
+    "Giles Lavelle <giles.lavelle@gmail.com>"
+  ],
+  "description": "A 2D in-browser RPG",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.0.3",
+    "underscore": "~1.5.2",
+    "requirejs": "~2.1.9",
+    "keymaster": "~1.6.1",
+    "stats.js": "*"
+  }
+}

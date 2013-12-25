@@ -1,8 +1,8 @@
 require.config({
-    baseUrl: 'js',
+    baseUrl: '',
 
     paths: {
-        'jquery': 'vendor/jquery-1.7.2.min',
+        'jquery': 'vendor/jquery/jquery',
 
         'entity': 'entity',
         'npc': 'npc',
@@ -16,14 +16,14 @@ require.config({
         'renderer': 'renderer',
 
         'plugins': 'plugins',
-        'keymaster': 'vendor/keymaster',
+        'keymaster': 'vendor/keymaster/keymaster',
 
-        'underscore': 'vendor/underscore',
+        'underscore': 'vendor/underscore/underscore',
         'perlin': 'vendor/perlin',
         'astar': 'vendor/astar',
         'graph': 'vendor/graph',
 
-        'stats': 'vendor/stats'
+        'stats': 'vendor/stats.js/src/Stats'
     },
 
     shim: {
@@ -38,7 +38,6 @@ require.config({
         'stats': {
             exports: 'Stats'
         },
-
 
         'astar': {
             exports: 'astar'
