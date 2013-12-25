@@ -1,4 +1,6 @@
-define(['perlin'], (PerlinNoise)->
+define(['noise'], (Noise)->
+    noise = new Noise(Math.random())
+
     class Game
         constructor: ->
             @name = 'Comrade'
@@ -32,7 +34,7 @@ define(['perlin'], (PerlinNoise)->
 
             # values for controlling the output of the Perlin noise function
             @perlin_size = 5
-            @perlin_z_axis = .8
+            # @perlin_z_axis = .8
             @input = null
 
             # IDs of tiles and objects that entities cannot walk through
@@ -62,18 +64,19 @@ define(['perlin'], (PerlinNoise)->
         generate_world: ->
             for x in [1..@world_width - 2]
                 for y in [1..@world_height - 2]
-                    tile = @block_type PerlinNoise @perlin_size * x / @world_width, @perlin_size * y / @world_height, @perlin_z_axis
+                    xx = @perlin_size * x / @world_width
+                    yy = @perlin_size * y / @world_height
+                    tile = @block_type(noise.simplex2(xx, yy))
                     @world[x][y] = tile
                     unless tile in @solid_things
                         @empty_tiles.push(x: x, y: y)
                         @obstacles[x][y] = 1
 
-        block_type: (height)->
+        block_type: (height) ->
             return 2 if height <= .3
             return 4 if .3 < height <= .4
             return 1 if .4 < height <= .7
-            3
+            return 3
 
-
-    new Game
+    return new Game()
 )

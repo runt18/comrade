@@ -25,7 +25,6 @@ define(['entity', 'game', 'scene', 'pathfinding'], (Entity, g, s, pathfinding) -
 
             @pathi = 0
             @moving_along_path = true
-            log @path
 
         move_along_path: ->
             if @pathi is @path.length
@@ -43,6 +42,4 @@ define(['entity', 'game', 'scene', 'pathfinding'], (Entity, g, s, pathfinding) -
 
             @move axis, direction
             @pathi += 1
-            # if @pathi is @path.length
-                # @moving_along_path = false
 )

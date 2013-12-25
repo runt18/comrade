@@ -4,7 +4,6 @@ require(
     'stats'],
 ($, g, s, r, player, Creature, wizard, Lumberjack, Fisherman, Stats)->
 
-
     load_textures = ->
         textures = new Image
         textures.src = 'img/textures.png'
@@ -28,7 +27,6 @@ require(
         , false
         music.muted = true # false for production
         music.play()
-
 
     keys_down =
         w: no
