@@ -42,30 +42,56 @@ window.log = function f() {
     }
 }());
 
-// place any jQuery/helper plugins in here, instead of separate, slower script files.
-
 (function() {
+    // RAF polyfill
     var lastTime = 0;
     var vendors = ['ms', 'moz', 'webkit', 'o'];
     for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
         window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
-        window.cancelAnimationFrame = 
+        window.cancelAnimationFrame =
           window[vendors[x]+'CancelAnimationFrame'] || window[vendors[x]+'CancelRequestAnimationFrame'];
     }
- 
-    if (!window.requestAnimationFrame)
+
+    if (!window.requestAnimationFrame){
         window.requestAnimationFrame = function(callback, element) {
             var currTime = new Date().getTime();
             var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-            var id = window.setTimeout(function() { callback(currTime + timeToCall); }, 
+            var id = window.setTimeout(function() { callback(currTime + timeToCall); },
               timeToCall);
             lastTime = currTime + timeToCall;
             return id;
         };
- 
-    if (!window.cancelAnimationFrame)
+    }
+
+    if (!window.cancelAnimationFrame){
         window.cancelAnimationFrame = function(id) {
             clearTimeout(id);
         };
+    }
+
+    require.config({
+        baseUrl: 'js',
+
+        paths: {
+            'jquery': 'vendor/jquery/jquery',
+            'keymaster': 'vendor/keymaster/keymaster',
+            'underscore': 'vendor/underscore/underscore',
+            'pathfinding': 'vendor/PathFinding.js/lib/pathfinding-browser',
+            'noise': 'vendor/noisejs/index',
+            'stats': 'vendor/stats.js/src/Stats'
+        },
+
+        shim: {
+            keymaster: {
+                exports: 'key'
+            },
+            underscore: {
+                exports: '_'
+            },
+            stats: {
+                exports: 'Stats'
+            }
+        }
+    });
 }());
 
