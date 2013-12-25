@@ -2,7 +2,7 @@ require(
     ['jquery', 'game', 'scene', 'renderer',
     'player', 'creature', 'wizard', 'lumberjack', 'fisherman'
     'stats'],
-($, g, s, r, player, Creature, wizard, Lumberjack, Fisherman, Stats, astar, Graph)->
+($, g, s, r, player, Creature, wizard, Lumberjack, Fisherman, Stats)->
 
 
     load_textures = ->

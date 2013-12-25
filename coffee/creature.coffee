@@ -1,4 +1,6 @@
-define(['entity', 'game', 'scene', 'astar'], (Entity, g, s, astar)->
+define(['entity', 'game', 'scene', 'pathfinding'], (Entity, g, s, pathfinding) ->
+    finder = new pathfinding.AStarFinder()
+
     class Creature extends Entity
         move_scene: ->
 
@@ -16,17 +18,14 @@ define(['entity', 'game', 'scene', 'astar'], (Entity, g, s, astar)->
                 right: x: 4, y: 4
 
         pathfind: (end_coords)->
-            start = s.current.graph.nodes[@pos.x][@pos.y]
-
             if not end_coords
-                end_coords = s.current.empty_tiles[Math.floor Math.random() * s.current.empty_tiles.length]
+                end_coords = s.current.empty_tiles[Math.floor(Math.random() * s.current.empty_tiles.length)]
 
-            end = s.current.graph.nodes[end_coords.x][end_coords.y]
-            @path = astar.search s.current.graph.nodes, start, end
+            @path = finder.findPath(@pos.x, @pos.y, end_coords.x, end_coords.y, s.current.graph)
 
             @pathi = 0
             @moving_along_path = true
-            # log @path
+            log @path
 
         move_along_path: ->
             if @pathi is @path.length
@@ -46,7 +45,4 @@ define(['entity', 'game', 'scene', 'astar'], (Entity, g, s, astar)->
             @pathi += 1
             # if @pathi is @path.length
                 # @moving_along_path = false
-
-
-
 )
