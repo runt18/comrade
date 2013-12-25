@@ -67,6 +67,16 @@ module.exports = function(grunt) {
         files: '<%= jshint.lib_test.src %>',
         tasks: ['jshint:lib_test', 'qunit']
       }
+    },
+    coffee: {
+      glob_to_multiple: {
+        expand: true,
+        flatten: false,
+        cwd: '.',
+        src: ['coffee/*.coffee'],
+        dest: 'js/',
+        ext: '.js'
+      }
     }
   });
 
