@@ -34,7 +34,7 @@ define(['noise'], (Noise)->
 
             # values for controlling the output of the Perlin noise function
             @perlin_size = 5
-            # @perlin_z_axis = .8
+            @perlin_z_axis = .8
             @input = null
 
             # IDs of tiles and objects that entities cannot walk through
@@ -72,7 +72,7 @@ define(['noise'], (Noise)->
                         @empty_tiles.push(x: x, y: y)
                         @obstacles[x][y] = 1
 
-        block_type: (height) ->
+        block_type: (height)->
             return 2 if height <= .3
             return 4 if .3 < height <= .4
             return 1 if .4 < height <= .7
