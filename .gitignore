@@ -54,3 +54,4 @@ build/config/buildinfo.properties
 todo.md
 vendor
 js/*.js
+node_modules
