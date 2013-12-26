@@ -1,6 +1,12 @@
 define(['noise'], (Noise)->
     noise = new Noise(Math.random())
 
+    BlockType =
+        GRASS: 1
+        WATER: 2
+        ROCK: 3
+        MUD: 4
+
     class Game
         constructor: ->
             @name = 'Comrade'
@@ -11,7 +17,7 @@ define(['noise'], (Noise)->
             # number of tiles overlap between scenes
             @border = 1
             # id of tile that surrounds the entire world to stop entities going outside the world
-            border_tile = 2
+            border_tile = BlockType.ROCK
 
             # TODO move these to the Scene class
             # width and height of one scene in tiles
@@ -30,15 +36,14 @@ define(['noise'], (Noise)->
             @world_height = (@height * @_num_scenes) - @_num_scenes + 1
 
             # number of trees in the world
-            @num_trees = 100
+            @num_trees = 80
 
             # values for controlling the output of the Perlin noise function
             @perlin_size = 5
-            @perlin_z_axis = .8
             @input = null
 
             # IDs of tiles and objects that entities cannot walk through
-            @solid_things = [2, 3, 5]
+            @solid_things = [BlockType.WATER, BlockType.ROCK, 5]
             @resource_ids = [2, 3, 5]
 
             # array of coordinate pairs specifying tiles not occupied by solid tiles or objects
@@ -56,7 +61,7 @@ define(['noise'], (Noise)->
 
         add_trees: ->
             for i in [1..@num_trees]
-                index = Math.floor Math.random() * @empty_tiles.length
+                index = Math.floor(Math.random() * @empty_tiles.length)
                 tree = @empty_tiles.splice(index, 1)[0]
                 @objects[tree.x][tree.y] = 5
                 @obstacles[tree.x][tree.y] = 1
@@ -67,16 +72,19 @@ define(['noise'], (Noise)->
                     xx = @perlin_size * x / @world_width
                     yy = @perlin_size * y / @world_height
                     tile = @block_type(noise.simplex2(xx, yy))
+
                     @world[x][y] = tile
+
                     unless tile in @solid_things
-                        @empty_tiles.push(x: x, y: y)
+                        @empty_tiles.push({x, y})
                         @obstacles[x][y] = 1
 
-        block_type: (height)->
-            return 2 if height <= .3
-            return 4 if .3 < height <= .4
-            return 1 if .4 < height <= .7
-            return 3
+        # Returns a block type given a terrain height in the range -1 to 1
+        block_type: (height) ->
+            return BlockType.WATER if height < -0.5
+            return BlockType.MUD if height < 0
+            return BlockType.GRASS if height < 0.5
+            return BlockType.ROCK
 
     return new Game()
 )
