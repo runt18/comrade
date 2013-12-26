@@ -83,7 +83,7 @@ define(['noise'], (Noise)->
         block_type: (height) ->
             return BlockType.WATER if height < -0.5
             return BlockType.MUD if height < 0
-            return BlockType.GRASS if height < 0.5
+            return BlockType.GRASS if height < 0.7
             return BlockType.ROCK
 
     return new Game()
