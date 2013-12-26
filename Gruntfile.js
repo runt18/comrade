@@ -77,6 +77,15 @@ module.exports = function(grunt) {
         dest: 'js',
         ext: '.js'
       }
+    },
+    watch: {
+      scripts: {
+        files: ['coffee/*.coffee'],
+        tasks: ['coffee'],
+        options: {
+          spawn: false,
+        },
+      }
     }
   });
 
@@ -87,6 +96,7 @@ module.exports = function(grunt) {
   // grunt.loadNpmTasks('grunt-contrib-jshint');
   // grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-coffee');
+  grunt.loadNpmTasks('grunt-contrib-watch');
 
   // Default task.
   grunt.registerTask('default', ['coffee']);
